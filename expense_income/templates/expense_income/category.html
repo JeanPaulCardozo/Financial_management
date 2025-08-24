@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categorías</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-white border-r">
+        <div class="p-6 text-2xl font-bold">FinanceApp</div>
+        <nav class="mt-6">
+          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
+            <span class="material-icons mr-3">dashboard</span>
+            Dashboard
+          </a>
+          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Presupuestos</a>
+          <a href="#" class="flex items-center px-6 py-2 text-gray-700 bg-gray-100 rounded-r-full">Categorías</a>
+          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Transacciones</a>
+          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Reportes</a>
+        </nav>
+        <div class="absolute bottom-6 left-6 flex items-center space-x-3">
+          <img src="https://via.placeholder.com/40" class="rounded-full" alt="User" />
+          <div>
+            <p class="text-sm font-semibold">{{ user.name }}</p>
+            <p class="text-xs text-gray-500">{{ user.email }}</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-800">Categorías</h1>
+            <p class="text-gray-500 text-sm">Administra las categorías de ingresos y gastos</p>
+          </div>
+          <button id="openModalBtn" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">+ Nueva Categoría</button>
+        </div>
+
+        <!-- Categorías de Ingreso -->
+        <section class="mb-8">
+          <h2 class="text-lg font-semibold mb-4 flex items-center space-x-2">
+            <span class="material-icons text-gray-600">arrow_downward</span>
+            <span>Categorías de Ingreso</span>
+          </h2>
+          <div class="space-y-4">
+            {% for category in categories_income %}
+              <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons text-gray-500">account_balance_wallet</span>
+                  <div>
+                    <p class="font-semibold">{{ category }}</p>
+                    <p class="text-sm text-gray-500">Presupuesto: $-</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2 text-gray-500">
+                  <span class="material-icons cursor-pointer">edit</span>
+                  <span class="material-icons cursor-pointer">delete</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <!-- Categorías de Gasto -->
+        <section>
+          <h2 class="text-lg font-semibold mb-4 flex items-center space-x-2">
+            <span class="material-icons text-gray-600">arrow_upward</span>
+            <span>Categorías de Gasto</span>
+          </h2>
+          <div class="space-y-4">
+            {% for category in categories_expense %}
+              <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                <div class="flex items-center space-x-3">
+                  <span class="material-icons text-gray-500">home</span>
+                  <div>
+                    <p class="font-semibold">{{ category }}</p>
+                    <p class="text-sm text-gray-500">Presupuesto: $-</p>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2 text-gray-500">
+                  <span class="material-icons cursor-pointer edit-btn" data-url="{% url 'expense_income:edit_category' category.id_category %}" data-name="{{ category.name_category }}" data-type="{{ category.type_category }}">edit</span>
+                  <span class="material-icons cursor-pointer">delete</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="p-6">
+      <!-- Modal -->
+      <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
+          <h2 class="text-xl font-bold mb-4">Crear Nueva Categoría</h2>
+          <form id="categoryForm" method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-1">Nombre de la categoría</label>
+              <input type="text" name="category_name" id="category_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Comida, Transporte..." />
+            </div>
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-1">Tipo</label>
+              <select name="category_type" id="category_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                {% for value, label in choices_category %}
+                  <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow w-full"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const modal = document.getElementById('categoryModal')
+      const openModalBtn = document.getElementById('openModalBtn')
+      const closeModalBtn = document.getElementById('closeModalBtn')
+      const categoryForm = document.getElementById('categoryForm')
+      const categoryNameInput = document.getElementById('category_name')
+      const categoryTypeSelect = document.getElementById('category_type')
+      const submitBtn = document.getElementById('submitBtn')
+      
+      openModalBtn.addEventListener('click', () => {
+        categoryForm.action = "{% url 'expense_income:create_category' %}"
+        submitBtn.textContent = 'Guardar'
+        categoryNameInput.value = ''
+        categoryTypeSelect.value = ''
+        modal.classList.remove('hidden')
+      })
+      
+      document.querySelectorAll('.edit-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.getAttribute('data-url')
+          const name = btn.getAttribute('data-name')
+          const type = btn.getAttribute('data-type')
+      
+          categoryForm.action = url
+          submitBtn.textContent = 'Actualizar'
+          categoryNameInput.value = name
+          categoryTypeSelect.value = type
+          modal.classList.remove('hidden')
+        })
+      })
+      
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden')
+      })
+      
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden')
+        }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceApp - Presupuestos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg flex flex-col justify-between">
+            <div>
+                <h1 class="text-2xl font-bold p-4">FinanceApp</h1>
+                <nav class="mt-4">
+                    <ul>
+                        <li class="px-4 py-2 bg-gray-100 font-medium flex items-center space-x-2">
+                            <span>🏠</span><span>Dashboard</span>
+                        </li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Presupuestos</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Categorías</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Transacciones</li>
+                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Reportes</li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="flex items-center p-4 space-x-2 border-t">
+                <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="User">
+                <div>
+                    <p class="text-sm font-medium">Alex Johnson</p>
+                    <p class="text-xs text-gray-500">alex@example.com</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 space-y-6 overflow-y-auto">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">Presupuestos</h2>
+                    <p class="text-gray-500">Administra tus presupuestos mensuales</p>
+                </div>
+                <button class="px-4 py-2 bg-black text-white rounded-lg shadow hover:bg-gray-800">+ Nuevo
+                    Presupuesto</button>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Left Column -->
+                <div class="col-span-1 space-y-6">
+                    <!-- Mis Presupuestos -->
+                    <div class="bg-white rounded-2xl shadow p-4">
+                        <h3 class="text-lg font-semibold mb-4">Mis Presupuestos</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-medium">Presupuesto Marzo 2025 <span class="float-right">$5,000.00</span>
+                                </p>
+                                <p class="text-sm text-gray-600">Gastado: $3,750.00 Restante: $1,250.00</p>
+                                <div class="w-full bg-gray-200 rounded h-2 mt-1">
+                                    <div class="bg-gray-800 h-2 rounded" style="width:75%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="font-medium">Presupuesto Febrero 2025 <span
+                                        class="float-right">$4,500.00</span></p>
+                                <p class="text-sm text-gray-600">Gastado: $4,500.00 Restante: $0.00</p>
+                                <div class="w-full bg-gray-200 rounded h-2 mt-1">
+                                    <div class="bg-gray-800 h-2 rounded" style="width:100%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-span-2 space-y-6">
+                    <!-- Categorías Asociadas -->
+                    <div class="bg-white rounded-2xl shadow p-4">
+                        <h3 class="text-lg font-semibold mb-4">Categorías Asociadas</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="border rounded-xl p-3">
+                                <p class="font-medium flex items-center space-x-2">🏠 <span>Vivienda</span></p>
+                                <div class="w-full bg-gray-200 rounded h-2 mt-2">
+                                    <div class="bg-gray-800 h-2 rounded" style="width:50%"></div>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">$750 / $1,500</p>
+                            </div>
+                            <div class="border rounded-xl p-3">
+                                <p class="font-medium flex items-center space-x-2">🍽️ <span>Alimentación</span></p>
+                                <div class="w-full bg-gray-200 rounded h-2 mt-2">
+                                    <div class="bg-gray-800 h-2 rounded" style="width:75%"></div>
+                                </div>
+                                <p class="text-sm text-gray-600 mt-1">$600 / $800</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progreso del Presupuesto -->
+                    <div class="bg-white rounded-2xl shadow p-4 h-48 flex items-center justify-center text-gray-400">
+                        Gráfica de Avance
+                    </div>
+
+                    <!-- Transacciones Relacionadas -->
+                    <div class="bg-white rounded-2xl shadow p-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold">Transacciones Relacionadas</h3>
+                            <a href="#" class="text-sm text-blue-500 hover:underline">Ver todas</a>
+                        </div>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <span>🏠</span>
+                                    <div>
+                                        <p class="font-medium">Alquiler</p>
+                                        <p class="text-xs text-gray-500">Vivienda</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-red-500 font-medium">-$750.00</p>
+                                    <p class="text-xs text-gray-500">1 Mar, 2025</p>
+                                </div>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <span>🛒</span>
+                                    <div>
+                                        <p class="font-medium">Supermercado</p>
+                                        <p class="text-xs text-gray-500">Alimentación</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-red-500 font-medium">-$150.00</p>
+                                    <p class="text-xs text-gray-500">3 Mar, 2025</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

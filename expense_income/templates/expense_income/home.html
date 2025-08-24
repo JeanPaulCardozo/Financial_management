@@ -41,12 +41,14 @@
                     <span class="text-sm font-medium">Dashboard</span>
                 </a>
                 <a href="#" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <span class="text-sm font-medium">Transacciones</span>
+                    <span class="text-sm font-medium">Presupuesto</span>
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                <a href="{% url 'expense_income:category' %}"
+                    class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
                     <span class="text-sm font-medium">Categorías</span>
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                <a href="{% url 'expense_income:budget' %}"
+                    class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
                     <span class="text-sm font-medium">Transacciones</span>
                 </a>
                 <a href="#" class="flex items-center px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
