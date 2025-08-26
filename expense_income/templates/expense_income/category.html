@@ -5,28 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Categorías</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <style>
+      .pt-serif-regular {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .pt-serif-bold {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+      .pt-serif-regular-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: italic;
+      }
+      
+      .pt-serif-bold-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: italic;
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-50 font-sans">
+  <body class="bg-gray-50">
     <div class="flex h-screen">
       <!-- Sidebar -->
       <aside class="w-64 bg-white border-r">
-        <div class="p-6 text-2xl font-bold">FinanceApp</div>
-        <nav class="mt-6">
-          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
-            <span class="material-icons mr-3">dashboard</span>
-            Dashboard
+        <div class="flex justify-start pt-serif-bold p-6 text-2xl">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7 mr-2">
+            <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
+          </svg>FinanceApp
+        </div>
+        <nav class="ml-4">
+          <a href="{% url 'expense_income:home' %}" class="pt-serif-regular flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+              <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+              <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+            </svg>Dashboard
           </a>
-          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Presupuestos</a>
-          <a href="#" class="flex items-center px-6 py-2 text-gray-700 bg-gray-100 rounded-r-full">Categorías</a>
-          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Transacciones</a>
-          <a href="#" class="flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">Reportes</a>
+          <a href="#" class="pt-serif-regular flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+              <path fill-rule="evenodd" d="M3.75 3.375c0-1.036.84-1.875 1.875-1.875H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375Zm10.5 1.875a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25ZM12 10.5a.75.75 0 0 1 .75.75v.028a9.727 9.727 0 0 1 1.687.28.75.75 0 1 1-.374 1.452 8.207 8.207 0 0 0-1.313-.226v1.68l.969.332c.67.23 1.281.85 1.281 1.704 0 .158-.007.314-.02.468-.083.931-.83 1.582-1.669 1.695a9.776 9.776 0 0 1-.561.059v.028a.75.75 0 0 1-1.5 0v-.029a9.724 9.724 0 0 1-1.687-.278.75.75 0 0 1 .374-1.453c.425.11.864.186 1.313.226v-1.68l-.968-.332C9.612 14.974 9 14.354 9 13.5c0-.158.007-.314.02-.468.083-.931.831-1.582 1.67-1.694.185-.025.372-.045.56-.06v-.028a.75.75 0 0 1 .75-.75Zm-1.11 2.324c.119-.016.239-.03.36-.04v1.166l-.482-.165c-.208-.072-.268-.211-.268-.285 0-.113.005-.225.015-.336.013-.146.14-.309.374-.34Zm1.86 4.392V16.05l.482.165c.208.072.268.211.268.285 0 .113-.005.225-.015.336-.012.146-.14.309-.374.34-.12.016-.24.03-.361.04Z" clip-rule="evenodd" />
+            </svg>Presupuestos
+          </a>
+          <a href="#" class="pt-serif-regular flex items-center px-2 py-2 text-gray-700 bg-gray-100 ml-4 w-[200px] rounded-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+              <path fill-rule="evenodd" d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z" clip-rule="evenodd" />
+            </svg>Categorías
+          </a>
+          <a href="#" class="pt-serif-regular flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+              <path fill-rule="evenodd" d="M3.75 3.375c0-1.036.84-1.875 1.875-1.875H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375Zm10.5 1.875a5.23 5.23 0 0 0-1.279-3.434 9.768 9.768 0 0 1 6.963 6.963A5.23 5.23 0 0 0 16.5 7.5h-1.875a.375.375 0 0 1-.375-.375V5.25ZM12 10.5a.75.75 0 0 1 .75.75v.028a9.727 9.727 0 0 1 1.687.28.75.75 0 1 1-.374 1.452 8.207 8.207 0 0 0-1.313-.226v1.68l.969.332c.67.23 1.281.85 1.281 1.704 0 .158-.007.314-.02.468-.083.931-.83 1.582-1.669 1.695a9.776 9.776 0 0 1-.561.059v.028a.75.75 0 0 1-1.5 0v-.029a9.724 9.724 0 0 1-1.687-.278.75.75 0 0 1 .374-1.453c.425.11.864.186 1.313.226v-1.68l-.968-.332C9.612 14.974 9 14.354 9 13.5c0-.158.007-.314.02-.468.083-.931.831-1.582 1.67-1.694.185-.025.372-.045.56-.06v-.028a.75.75 0 0 1 .75-.75Zm-1.11 2.324c.119-.016.239-.03.36-.04v1.166l-.482-.165c-.208-.072-.268-.211-.268-.285 0-.113.005-.225.015-.336.013-.146.14-.309.374-.34Zm1.86 4.392V16.05l.482.165c.208.072.268.211.268.285 0 .113-.005.225-.015.336-.012.146-.14.309-.374.34-.12.016-.24.03-.361.04Z" clip-rule="evenodd" />
+            </svg>Transacciones
+          </a>
+          <a href="#" class="pt-serif-regular flex items-center px-6 py-2 text-gray-700 hover:bg-gray-100">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+              <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 0 1 8.25-8.25.75.75 0 0 1 .75.75v6.75H18a.75.75 0 0 1 .75.75 8.25 8.25 0 0 1-16.5 0Z" clip-rule="evenodd" />
+              <path fill-rule="evenodd" d="M12.75 3a.75.75 0 0 1 .75-.75 8.25 8.25 0 0 1 8.25 8.25.75.75 0 0 1-.75.75h-7.5a.75.75 0 0 1-.75-.75V3Z" clip-rule="evenodd" />
+            </svg>Reportes
+          </a>
         </nav>
         <div class="absolute bottom-6 left-6 flex items-center space-x-3">
-          <img src="https://via.placeholder.com/40" class="rounded-full" alt="User" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+          </svg>
+
           <div>
-            <p class="text-sm font-semibold">{{ user.name }}</p>
-            <p class="text-xs text-gray-500">{{ user.email }}</p>
+            <p class="pt-serif-bold text-sm font-semibold">{{ user.name }}</p>
+            <p class="pt-serif-regular-italic text-xs text-gray-500">{{ user.email }}</p>
           </div>
         </div>
       </aside>
@@ -35,91 +89,185 @@
       <main class="flex-1 p-8 overflow-y-auto">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h1 class="text-2xl font-bold text-gray-800">Categorías</h1>
-            <p class="text-gray-500 text-sm">Administra las categorías de ingresos y gastos</p>
+            <h1 class="pt-serif-bold text-2xl font-bold text-gray-800">Categorías</h1>
+            <p class="pt-serif-regular text-gray-500 text-sm">Administra las categorías de ingresos y gastos</p>
           </div>
-          <button id="openModalBtn" class="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800">+ Nueva Categoría</button>
+          <button id="openModalBtn" class="pt-serif-regular flex item-center bg-black text-white text-sm px-3 py-2 rounded-md hover:bg-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-5 mr-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>Nueva Categoría
+          </button>
         </div>
-
-        <!-- Categorías de Ingreso -->
-        <section class="mb-8">
-          <h2 class="text-lg font-semibold mb-4 flex items-center space-x-2">
-            <span class="material-icons text-gray-600">arrow_downward</span>
-            <span>Categorías de Ingreso</span>
-          </h2>
-          <div class="space-y-4">
-            {% for category in categories_income %}
-              <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
-                <div class="flex items-center space-x-3">
-                  <span class="material-icons text-gray-500">account_balance_wallet</span>
-                  <div>
-                    <p class="font-semibold">{{ category }}</p>
-                    <p class="text-sm text-gray-500">Presupuesto: $-</p>
+        <!-- Income Category -->
+        <section>
+          <div class="bg-white border border-gray-300 p-4 rounded-2xl">
+            <div class="border-b border-gray-300 mb-4">
+              {% if order_income == 'asc' %}
+                <a href="{% url 'expense_income:category' %}?order_income=desc">
+                  <button>
+                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 down-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                      </svg>
+                      <span class="pt-serif-regular">Categorías de Ingreso</span>
+                    </h2>
+                  </button>
+                </a>
+              {% else %}
+                <a href="{% url 'expense_income:category' %}?order_income=asc">
+                  <button>
+                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 up-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                      </svg>
+                      <span class="pt-serif-regular">Categorías de Ingreso</span>
+                    </h2>
+                  </button>
+                </a>
+              {% endif %}
+            </div>
+            <div class="space-y-2">
+              {% if not categories_income %}
+                <div class="flex justify-center">
+                  <p class="pt-serif-regular text-gray-400 text-base">No hay categorías de ingreso</p>
+                </div>
+              {% else %}
+                {% for category in categories_income %}
+                  <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                    <div class="flex items-center space-x-3">
+                      <div>
+                        <p class="pt-serif-regular text-gray-700">{{ category }}</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2 text-gray-500">
+                      <span class="edit-btn" data-url="{% url 'expense_income:edit_category' category.id_category %}" data-name="{{ category.name_category }}" data-type="{{ category.type_category }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                          <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                        </svg>
+                      </span>
+                      <span class="remove-btn" data-url="{% url 'expense_income:remove_category' category.id_category %}" data-name="{{ category.name_category }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                          <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                          <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div class="flex items-center space-x-2 text-gray-500">
-                  <span class="material-icons cursor-pointer">edit</span>
-                  <span class="material-icons cursor-pointer">delete</span>
-                </div>
-              </div>
-            {% endfor %}
+                {% endfor %}
+              {% endif %}
+            </div>
           </div>
         </section>
 
-        <!-- Categorías de Gasto -->
-        <section>
-          <h2 class="text-lg font-semibold mb-4 flex items-center space-x-2">
-            <span class="material-icons text-gray-600">arrow_upward</span>
-            <span>Categorías de Gasto</span>
-          </h2>
-          <div class="space-y-4">
-            {% for category in categories_expense %}
-              <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
-                <div class="flex items-center space-x-3">
-                  <span class="material-icons text-gray-500">home</span>
-                  <div>
-                    <p class="font-semibold">{{ category }}</p>
-                    <p class="text-sm text-gray-500">Presupuesto: $-</p>
+        <!-- Expense Category -->
+        <section class="mt-4">
+          <div class="bg-white border border-gray-300 p-4 rounded-2xl">
+            <div class="border-b border-gray-300 mb-4">
+              {% if order_expense == 'asc' %}
+                <a href="{% url 'expense_income:category' %}?order_expense=desc">
+                  <button>
+                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 down-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                      </svg>
+                      <span class="pt-serif-regular">Categorías de gasto</span>
+                    </h2>
+                  </button>
+                </a>
+              {% else %}
+                <a href="{% url 'expense_income:category' %}?order_expense=asc">
+                  <button>
+                    <h2 class="text-base font-semibold mb-4 flex items-center space-x-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 up-btn">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                      </svg>
+                      <span class="pt-serif-regular">Categorías de gasto</span>
+                    </h2>
+                  </button>
+                </a>
+              {% endif %}
+            </div>
+            <div class="space-y-2">
+              {% if not categories_expense %}
+                <div class="flex justify-center">
+                  <p class="pt-serif-regular text-gray-400 text-base">No hay categorías de gasto</p>
+                </div>
+              {% else %}
+                {% for category in categories_expense %}
+                  <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                    <div class="flex items-center space-x-3">
+                      <div>
+                        <p class="pt-serif-regular text-gray-700">{{ category }}</p>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2 text-gray-500">
+                      <span class="edit-btn" data-url="{% url 'expense_income:edit_category' category.id_category %}" data-name="{{ category.name_category }}" data-type="{{ category.type_category }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                          <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                          <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                        </svg>
+                      </span>
+                      <span class="remove-btn" data-url="{% url 'expense_income:remove_category' category.id_category %}" data-name="{{ category.name_category }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                          <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                          <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                        </svg>
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div class="flex items-center space-x-2 text-gray-500">
-                  <span class="material-icons cursor-pointer edit-btn" data-url="{% url 'expense_income:edit_category' category.id_category %}" data-name="{{ category.name_category }}" data-type="{{ category.type_category }}">edit</span>
-                  <span class="material-icons cursor-pointer">delete</span>
-                </div>
-              </div>
-            {% endfor %}
+                {% endfor %}
+              {% endif %}
+            </div>
           </div>
         </section>
       </main>
     </div>
 
-    <div class="p-6">
+    <!-- Modal Add/Edit Category -->
+    <div id="categoryModal" class="hidden">
       <!-- Modal -->
-      <div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
           <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
-          <h2 class="text-xl font-bold mb-4">Crear Nueva Categoría</h2>
+          <h2 class="pt-serif-bold text-xl mb-4">Crear Nueva Categoría</h2>
           <form id="categoryForm" method="post">
             {% csrf_token %}
             <div class="mb-4">
-              <label class="block text-sm font-medium mb-1">Nombre de la categoría</label>
-              <input type="text" name="category_name" id="category_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Comida, Transporte..." />
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Nombre de la categoría</label>
+              <input type="text" name="category_name" id="category_name" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Comida, Transporte..." />
             </div>
             <div class="mb-4">
-              <label class="block text-sm font-medium mb-1">Tipo</label>
-              <select name="category_type" id="category_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Tipo</label>
+              <select name="category_type" id="category_type" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
                 {% for value, label in choices_category %}
                   <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
               </select>
             </div>
-            <button type="submit" id="submitBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow w-full"></button>
+            <button type="submit" id="submitBtn" class="pt-serif-regular bg-green-400 text-white px-4 py-2 rounded-lg shadow w-full"></button>
           </form>
         </div>
       </div>
     </div>
 
+    <!-- Modal Remove Category -->
+    <div id="categoryModalDelete" class="hidden">
+      <!-- Modal -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <button id="closeModalDeleteBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
+          <h2 class="pt-serif-bold text-xl mb-4">Eliminar Categoría</h2>
+          <div class="mb-4">
+            <label id="info-remove" class="pt-serif-regular block text-sm font-medium mb-4"></label>
+            <a href="" id="remove-item"><button type="submit" id="submitBtn" class="pt-serif-regular bg-red-400 text-white px-4 py-2 rounded-lg shadow w-full">Eliminar</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
+      //Add/Edit
       const modal = document.getElementById('categoryModal')
       const openModalBtn = document.getElementById('openModalBtn')
       const closeModalBtn = document.getElementById('closeModalBtn')
@@ -157,7 +305,31 @@
       window.addEventListener('click', (e) => {
         if (e.target === modal) {
           modal.classList.add('hidden')
+          modalDelete.classList.add('hidden')
         }
+      })
+      
+      //Remove
+      const modalDelete = document.getElementById('categoryModalDelete')
+      const openModalDeleteBtn = document.getElementsByName('remove-btn')
+      const removeItem = document.getElementById('remove-item')
+      const infoRemove = document.getElementById('info-remove')
+      const closeModalDeleteBtn = document.getElementById('closeModalDeleteBtn')
+      
+      document.querySelectorAll('.remove-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.getAttribute('data-url')
+          const name = btn.getAttribute('data-name')
+      
+          infoRemove.textContent = 'Selecciona confirmar para eliminar la categoría ' + name
+          removeItem.setAttribute('href', url)
+      
+          modalDelete.classList.remove('hidden')
+        })
+      })
+      
+      closeModalDeleteBtn.addEventListener('click', () => {
+        modalDelete.classList.add('hidden')
       })
     </script>
   </body>
