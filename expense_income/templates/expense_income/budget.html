@@ -1,146 +1,323 @@
 <!DOCTYPE html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presupuestos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <style>
+      .pt-serif-regular {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .pt-serif-bold {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+      .pt-serif-regular-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: italic;
+      }
+      
+      .pt-serif-bold-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: italic;
+      }
+    </style>
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinanceApp - Presupuestos</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
-
-<body class="bg-gray-50 font-sans">
+  <body class="bg-gray-50">
     <div class="flex h-screen">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg flex flex-col justify-between">
-            <div>
-                <h1 class="text-2xl font-bold p-4">FinanceApp</h1>
-                <nav class="mt-4">
-                    <ul>
-                        <li class="px-4 py-2 bg-gray-100 font-medium flex items-center space-x-2">
-                            <span>🏠</span><span>Dashboard</span>
-                        </li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Presupuestos</li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Categorías</li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Transacciones</li>
-                        <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">Reportes</li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="flex items-center p-4 space-x-2 border-t">
-                <img src="https://via.placeholder.com/40" class="w-10 h-10 rounded-full" alt="User">
-                <div>
-                    <p class="text-sm font-medium">Alex Johnson</p>
-                    <p class="text-xs text-gray-500">alex@example.com</p>
+      <!-- Sidebar -->
+      {% include './menu.html' %}
+
+      <!-- Main content -->
+      <main class="flex-1 p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="pt-serif-bold text-2xl font-bold text-gray-800">Presupuestos</h1>
+            <p class="pt-serif-regular text-gray-500 text-sm">Administra tus presupuestos mensuales</p>
+          </div>
+          <button id="openModalBtn" class="pt-serif-regular flex item-center bg-black text-white text-sm px-3 py-2 rounded-md hover:bg-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-5 mr-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>Nueva Presupuesto
+          </button>
+        </div>
+
+        <!-- Filtros Modernizados -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <!-- Sección de filtros principales -->
+            <div class="flex flex-wrap items-center gap-4">
+              <div class="relative">
+                <label class="pt-serif-bold block text-xs font-medium text-gray-600 mb-1">Año</label>
+                <div class="relative">
+                  <select id="year" class="pt-serif-regular text-sm appearance-none bg-gray-50 border-0 rounded-lg px-4 py-1 pr-10 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:bg-white focus:border-blue-300 transition-all duration-200 cursor-pointer min-w-[120px]">
+                    {% for year in list_years %}
+                      <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
                 </div>
-            </div>
-        </aside>
+              </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6 space-y-6 overflow-y-auto">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h2 class="text-2xl font-bold">Presupuestos</h2>
-                    <p class="text-gray-500">Administra tus presupuestos mensuales</p>
+              <div class="relative">
+                <label class="pt-serif-bold block text-xs font-medium text-gray-600 mb-1">Mes</label>
+                <div class="relative">
+                  <select id="month" class="pt-serif-regular text-sm appearance-none bg-gray-50 border-0 rounded-lg px-4 py-1 pr-10 text-gray-900 font-medium focus:outline-none focus:ring-2 focus:border-blue-300 focus:bg-white transition-all duration-200 cursor-pointer min-w-[120px]">
+                    {% for item in list_months %}
+                      <option value="{{ item.number_month }}">{{ item.month }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  </div>
                 </div>
-                <button class="px-4 py-2 bg-black text-white rounded-lg shadow hover:bg-gray-800">+ Nuevo
-                    Presupuesto</button>
+              </div>
             </div>
 
-            <!-- Content Grid -->
-            <div class="grid grid-cols-3 gap-6">
-                <!-- Left Column -->
-                <div class="col-span-1 space-y-6">
-                    <!-- Mis Presupuestos -->
-                    <div class="bg-white rounded-2xl shadow p-4">
-                        <h3 class="text-lg font-semibold mb-4">Mis Presupuestos</h3>
-                        <div class="space-y-4">
-                            <div>
-                                <p class="font-medium">Presupuesto Marzo 2025 <span class="float-right">$5,000.00</span>
-                                </p>
-                                <p class="text-sm text-gray-600">Gastado: $3,750.00 Restante: $1,250.00</p>
-                                <div class="w-full bg-gray-200 rounded h-2 mt-1">
-                                    <div class="bg-gray-800 h-2 rounded" style="width:75%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <p class="font-medium">Presupuesto Febrero 2025 <span
-                                        class="float-right">$4,500.00</span></p>
-                                <p class="text-sm text-gray-600">Gastado: $4,500.00 Restante: $0.00</p>
-                                <div class="w-full bg-gray-200 rounded h-2 mt-1">
-                                    <div class="bg-gray-800 h-2 rounded" style="width:100%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Búsqueda y acciones -->
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <input id="searchBudget" type="text" placeholder="Buscar presupuesto..." class="pt-serif-regular text-sm bg-gray-50 border-0 rounded-lg px-4 py-1 pl-10 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-black focus:bg-white transition-all duration-200 min-w-[200px]" />
+
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
                 </div>
-
-                <!-- Right Column -->
-                <div class="col-span-2 space-y-6">
-                    <!-- Categorías Asociadas -->
-                    <div class="bg-white rounded-2xl shadow p-4">
-                        <h3 class="text-lg font-semibold mb-4">Categorías Asociadas</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="border rounded-xl p-3">
-                                <p class="font-medium flex items-center space-x-2">🏠 <span>Vivienda</span></p>
-                                <div class="w-full bg-gray-200 rounded h-2 mt-2">
-                                    <div class="bg-gray-800 h-2 rounded" style="width:50%"></div>
-                                </div>
-                                <p class="text-sm text-gray-600 mt-1">$750 / $1,500</p>
-                            </div>
-                            <div class="border rounded-xl p-3">
-                                <p class="font-medium flex items-center space-x-2">🍽️ <span>Alimentación</span></p>
-                                <div class="w-full bg-gray-200 rounded h-2 mt-2">
-                                    <div class="bg-gray-800 h-2 rounded" style="width:75%"></div>
-                                </div>
-                                <p class="text-sm text-gray-600 mt-1">$600 / $800</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Progreso del Presupuesto -->
-                    <div class="bg-white rounded-2xl shadow p-4 h-48 flex items-center justify-center text-gray-400">
-                        Gráfica de Avance
-                    </div>
-
-                    <!-- Transacciones Relacionadas -->
-                    <div class="bg-white rounded-2xl shadow p-4">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">Transacciones Relacionadas</h3>
-                            <a href="#" class="text-sm text-blue-500 hover:underline">Ver todas</a>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="flex justify-between items-center">
-                                <div class="flex items-center space-x-2">
-                                    <span>🏠</span>
-                                    <div>
-                                        <p class="font-medium">Alquiler</p>
-                                        <p class="text-xs text-gray-500">Vivienda</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-red-500 font-medium">-$750.00</p>
-                                    <p class="text-xs text-gray-500">1 Mar, 2025</p>
-                                </div>
-                            </li>
-                            <li class="flex justify-between items-center">
-                                <div class="flex items-center space-x-2">
-                                    <span>🛒</span>
-                                    <div>
-                                        <p class="font-medium">Supermercado</p>
-                                        <p class="text-xs text-gray-500">Alimentación</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-red-500 font-medium">-$150.00</p>
-                                    <p class="text-xs text-gray-500">3 Mar, 2025</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+              </div>
+              <a href="{% url 'expense_income:budget' %}">
+                <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 px-1 rounded-lg transition-colors duration-200 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                    <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 0 1 .628.74v2.288a2.25 2.25 0 0 1-.659 1.59l-4.682 4.683a2.25 2.25 0 0 0-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 0 1 8 18.25v-5.757a2.25 2.25 0 0 0-.659-1.591L2.659 6.22A2.25 2.25 0 0 1 2 4.629V2.34a.75.75 0 0 1 .628-.74Z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </a>
             </div>
-        </main>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Mis Presupuestos -->
+          <div class="bg-white p-4 rounded-lg shadow-sm">
+            <h3 class="pt-serif-bold font-semibold text-gray-800 mb-4">Mis Presupuestos</h3>
+            <div class="space-y-4">
+              {% for budget in my_budgets %}
+                <div class="bg-gray-50 p-3 rounded-lg shadow">
+                  <div class="pt-serif-bold flex justify-between font-medium text-gray-900">
+                    <span>{{ budget.category }}</span>
+                    <span>{{ budget.budget_limit }}</span>
+                  </div>
+                  <div class="pt-serif-regular mt-2 text-gray-500 text-sm">
+                    <p>Gastado: $-</p>
+                    <p>Restante: $-</p>
+                    <div class="h-2 bg-gray-200 rounded mt-1">
+                      <div class="h-2 bg-black rounded" style="width:0%"></div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Progreso del Presupuesto -->
+          <div class="bg-white p-4 rounded-lg shadow-sm">
+            <h3 class="pt-serif-bold font-semibold text-gray-800 mb-4">Progreso del Presupuesto</h3>
+            <div class="bg-gray-100 h-64 flex items-center justify-center text-gray-400">Gráfica de Avance</div>
+
+            <h3 class="font-semibold text-gray-800 mt-6 mb-2">Transacciones Relacionadas</h3>
+            <div class="space-y-2">
+              <div class="flex justify-between items-center bg-gray-50 p-2 rounded">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <span>🏠</span>
+                  <span>Alquiler</span>
+                </div>
+                <div class="text-gray-900 font-medium">-$750.00</div>
+              </div>
+
+              <div class="flex justify-between items-center bg-gray-50 p-2 rounded">
+                <div class="flex items-center gap-2 text-gray-700">
+                  <span>🛒</span>
+                  <span>Supermercado</span>
+                </div>
+                <div class="text-gray-900 font-medium">-$150.00</div>
+              </div>
+            </div>
+            <div class="text-right mt-2">
+              <a href="#" class="text-gray-500 text-sm hover:text-black">Ver todas</a>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
-</body>
 
+    <!-- Modal Add/Edit Presupuesto -->
+    <div id="budgetModal" class="hidden">
+      <!-- Modal -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
+          <h2 class="pt-serif-bold text-xl mb-4">Crear Nuevo presupuesto</h2>
+          <form id="budgetForm" method="post">
+            {% csrf_token %}
+            <div class="flex gap-4 mb-4">
+              <div class="flex-1">
+                <label class="pt-serif-bold block text-sm font-medium mb-1">Monto Total</label>
+                <input type="text" name="amount_budget" id="amount_budget" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="0.00" />
+              </div>
+              <div class="flex-1">
+                <label class="pt-serif-bold block text-sm font-medium mb-1">Periodo</label>
+                <select name="period" id="period" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                  {% for value, label in choice_period %}
+                    <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Categoría</label>
+              <select name="category" id="category" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                {% for category in choice_category %}
+                  <option value="{{ category.id_category }}">{{ category.name_category }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" id="submitBtn" class="pt-serif-regular bg-green-400 text-white px-4 py-2 rounded-lg shadow w-full"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Remove Category -->
+    <div id="categoryModalDelete" class="hidden">
+      <!-- Modal -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <button id="closeModalDeleteBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
+          <h2 class="pt-serif-bold text-xl mb-4">Eliminar Categoría</h2>
+          <div class="mb-4">
+            <label id="info-remove" class="pt-serif-regular block text-sm font-medium mb-4"></label>
+            <a href="" id="remove-item"><button type="submit" id="submitBtn" class="pt-serif-regular bg-red-400 text-white px-4 py-2 rounded-lg shadow w-full">Eliminar</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      //Add/Edit
+      const modal = document.getElementById('budgetModal')
+      const openModalBtn = document.getElementById('openModalBtn')
+      const closeModalBtn = document.getElementById('closeModalBtn')
+      const categoryForm = document.getElementById('budgetForm')
+      const amountBudget = document.getElementById('amount_budget')
+      const period = document.getElementById('period')
+      const category = document.getElementById('category')
+      const submitBtn = document.getElementById('submitBtn')
+      
+      openModalBtn.addEventListener('click', () => {
+        categoryForm.action = "{% url 'expense_income:create_budget' %}"
+        submitBtn.textContent = 'Guardar'
+        amountBudget.value = ''
+        period.value = ''
+        category.value = ''
+        modal.classList.remove('hidden')
+      })
+      
+      const searchBudget = document.getElementById('searchBudget')
+      const monthBudget = document.getElementById('month')
+      const yearBudget = document.getElementById('year')
+      
+      const params = new URLSearchParams(window.location.search)
+      
+      // Get initial values
+      if (params.get('month')) monthBudget.value = params.get('month')
+      if (params.get('year')) yearBudget.value = params.get('year')
+      if (params.get('q')) searchBudget.value = params.get('q')
+      
+      // Update url
+      function updateURL(param, value) {
+        if (value) {
+          params.set(param, value)
+        } else {
+          params.delete(param)
+        }
+        window.location.href = "{% url 'expense_income:budget' %}?" + params.toString()
+      }
+      
+      // Events
+      monthBudget.addEventListener('change', (e) => updateURL('month', e.target.value))
+      yearBudget.addEventListener('change', (e) => updateURL('year', e.target.value))
+      
+      // Search
+      searchBudget.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          updateURL('q', e.target.value)
+        }
+      })
+      
+      /*document.querySelectorAll('.edit-btn').forEach((btn) => {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              btn.addEventListener('click', () => {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const url = btn.getAttribute('data-url')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const name = btn.getAttribute('data-name')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const type = btn.getAttribute('data-type')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryForm.action = url
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                submitBtn.textContent = 'Actualizar'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryNameInput.value = name
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryTypeSelect.value = type
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                modal.classList.remove('hidden')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              })
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })*/
+      
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden')
+      })
+      
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden')
+        }
+      })
+      
+      //Remove
+      /*const modalDelete = document.getElementById('categoryModalDelete')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const openModalDeleteBtn = document.getElementsByName('remove-btn')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const removeItem = document.getElementById('remove-item')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const infoRemove = document.getElementById('info-remove')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const closeModalDeleteBtn = document.getElementById('closeModalDeleteBtn')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            document.querySelectorAll('.remove-btn').forEach((btn) => {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              btn.addEventListener('click', () => {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const url = btn.getAttribute('data-url')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const name = btn.getAttribute('data-name')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                infoRemove.textContent = 'Selecciona confirmar para eliminar la categoría ' + name
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                removeItem.setAttribute('href', url)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                modalDelete.classList.remove('hidden')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              })
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            closeModalDeleteBtn.addEventListener('click', () => {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              modalDelete.classList.add('hidden')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })*/
+    </script>
+  </body>
 </html>

@@ -1,12 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Category
+from .models import Category, Budget
+from datetime import datetime
+from django.db.models.functions import ExtractMonth, ExtractYear
+import calendar
+import locale
+
+# change languege to spanish
+# This action return the name of month in spanish
+locale.setlocale(locale.LC_TIME, "es_CO.UTF-8")
 
 
 @login_required(login_url='/login')
 def home(request):
     """Home page"""
-    return render(request, 'expense_income/home.html')
+    context = {"type_page": "home"}
+    return render(request, 'expense_income/home.html', context)
 
 
 @login_required(login_url='/login')
@@ -30,7 +39,8 @@ def category(request):
     context = {'choices_category': choices_category, 'user': request.user,
                'categories_income': categories_income,
                'categories_expense': categories_expense,
-               'order_income': order_income, 'order_expense': order_expense
+               'order_income': order_income, 'order_expense': order_expense,
+               'type_page': 'category'
                }
 
     return render(request, 'expense_income/category.html', context)
@@ -64,6 +74,7 @@ def edit_category(request, id_category):
 
 @login_required(login_url='/login')
 def remove_category(request, id_category):
+    """Remove Category"""
     category = Category.objects.get(id_category=id_category)
     category.delete()
     return redirect('expense_income:category')
@@ -71,4 +82,55 @@ def remove_category(request, id_category):
 
 @login_required(login_url='/login')
 def budget(request):
-    return render(request, 'expense_income/budget.html')
+    """home budget"""
+
+    # Options Period and Category
+    choice_period = Budget.Period.choices
+    choice_category = Category.objects.filter(user=request.user)
+
+    # Get Year, Month and name category
+    current_year = request.GET.get("year", datetime.now().year)
+    current_month = request.GET.get("month", datetime.now().month)
+    category_name = request.GET.get("q", "")
+
+    budget_list = Budget.objects.filter(user=request.user)
+
+    if category_name:
+        my_budgets = budget_list.filter(date__year=current_year, date__month=current_month,
+                                        category__name_category__icontains=category_name).order_by("-date")
+    else:
+        my_budgets = budget_list.filter(
+            date__year=current_year, date__month=current_month).order_by("-date")
+
+    list_years = budget_list.annotate(year=ExtractYear('date')).values_list(
+        'year', flat=True).distinct().order_by("-year")
+
+    # Get Months by Year
+    get_months_by_year = budget_list.annotate(
+        year=ExtractYear('date')).filter(year=current_year).distinct()
+    list_months = get_months_by_year.annotate(number_month=ExtractMonth(
+        'date')).values('number_month').order_by('number_month').distinct()
+    for month in list_months:
+        month["month"] = calendar.month_name[month["number_month"]]
+
+    context = {"type_page": "budget", "choice_period": choice_period,
+               "choice_category": choice_category, 'user': request.user,
+               "my_budgets": my_budgets,
+               "list_years": list_years, "list_months": list_months}
+    return render(request, 'expense_income/budget.html', context)
+
+
+@login_required(login_url='/login')
+def create_budget(request):
+    """Create budget"""
+    if request.method == "POST":
+        category_id = request.POST["category"]
+        category_instance = Category.objects.get(id_category=category_id)
+
+        amount = request.POST["amount_budget"]
+        period = request.POST["period"]
+
+        Budget.objects.create(budget_limit=amount, date=datetime.now(
+        ), period=period, user=request.user, category=category_instance)
+
+        return redirect('expense_income:budget')
