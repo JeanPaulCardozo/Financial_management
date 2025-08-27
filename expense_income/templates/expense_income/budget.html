@@ -120,17 +120,25 @@
             <h3 class="pt-serif-bold font-semibold text-gray-800 mb-4">Mis Presupuestos</h3>
             <div class="space-y-4">
               {% for budget in my_budgets %}
-                <div class="bg-gray-50 p-3 rounded-lg shadow">
-                  <div class="pt-serif-bold flex justify-between font-medium text-gray-900">
-                    <span>{{ budget.category }}</span>
-                    <span>{{ budget.budget_limit }}</span>
-                  </div>
-                  <div class="pt-serif-regular mt-2 text-gray-500 text-sm">
-                    <p>Gastado: $-</p>
-                    <p>Restante: $-</p>
-                    <div class="h-2 bg-gray-200 rounded mt-1">
-                      <div class="h-2 bg-black rounded" style="width:0%"></div>
+                <div class="flex justify-between items-stretch rounded-lg shadow">
+                  <div class="flex-2 select-budget bg-gray-50 pt-3 pl-3 pb-3 pr-5 rounded-tl-lg rounded-bl-lg hover:bg-gray-100 active:bg-gray-200" data-url="{% url 'expense_income:edit_budget' budget.id_budget %}" data-amount="{{ budget.budget_limit }}" data-period="{{ budget.period }}" data-category="{{ budget.category.id_category }}">
+                    <div class="pt-serif-bold flex gap-2 font-medium text-gray-900">
+                      <span>{{ budget.category }} | {{ budget.period }}</span>
+                      <span>{{ budget.budget_limit }}</span>
                     </div>
+                    <div class="pt-serif-regular mt-2 text-gray-500 text-sm">
+                      <p>Gastado: $-</p>
+                      <p>Restante: $-</p>
+                      <div class="h-2 bg-gray-200 rounded mt-1">
+                        <div class="h-2 bg-black rounded" style="width:0%"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-name="{{ budget.category.name_category }}" data-url="{% url 'expense_income:remove_budget' budget.id_budget %}" class="remove-btn text-white flex-1 flex items-center justify-center rounded-tr-lg rounded-br-lg bg-red-400 hover:bg-red-500 active:bg-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                      <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                      <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.133 2.845a.75.75 0 0 1 1.06 0l1.72 1.72 1.72-1.72a.75.75 0 1 1 1.06 1.06l-1.72 1.72 1.72 1.72a.75.75 0 1 1-1.06 1.06L12 15.685l-1.72 1.72a.75.75 0 1 1-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                    </svg>
                   </div>
                 </div>
               {% endfor %}
@@ -180,11 +188,11 @@
             <div class="flex gap-4 mb-4">
               <div class="flex-1">
                 <label class="pt-serif-bold block text-sm font-medium mb-1">Monto Total</label>
-                <input type="text" name="amount_budget" id="amount_budget" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="0.00" />
+                <input type="number" step="0.01" min="0" name="amount_budget" id="amount_budget" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="0.00" />
               </div>
               <div class="flex-1">
                 <label class="pt-serif-bold block text-sm font-medium mb-1">Periodo</label>
-                <select name="period" id="period" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                <select name="period" id="SelectorPeriod" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
                   {% for value, label in choice_period %}
                     <option value="{{ value }}">{{ label }}</option>
                   {% endfor %}
@@ -193,7 +201,7 @@
             </div>
             <div class="mb-4">
               <label class="pt-serif-bold block text-sm font-medium mb-1">Categoría</label>
-              <select name="category" id="category" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+              <select name="category" id="SelectorCategory" class="text-sm pt-serif-regular border w-full border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
                 {% for category in choice_category %}
                   <option value="{{ category.id_category }}">{{ category.name_category }}</option>
                 {% endfor %}
@@ -206,15 +214,15 @@
     </div>
 
     <!-- Modal Remove Category -->
-    <div id="categoryModalDelete" class="hidden">
+    <div id="budgetModalDelete" class="hidden">
       <!-- Modal -->
       <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
         <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
           <button id="closeModalDeleteBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
-          <h2 class="pt-serif-bold text-xl mb-4">Eliminar Categoría</h2>
+          <h2 class="pt-serif-bold text-xl mb-4">Eliminar Presupuesto</h2>
           <div class="mb-4">
             <label id="info-remove" class="pt-serif-regular block text-sm font-medium mb-4"></label>
-            <a href="" id="remove-item"><button type="submit" id="submitBtn" class="pt-serif-regular bg-red-400 text-white px-4 py-2 rounded-lg shadow w-full">Eliminar</button></a>
+            <a href="" id="remove-item"><button type="submit" id="submitBtn" class="pt-serif-regular bg-red-400 text-white px-4 py-2 rounded-lg shadow w-full">Confirmar</button></a>
           </div>
         </div>
       </div>
@@ -227,17 +235,33 @@
       const closeModalBtn = document.getElementById('closeModalBtn')
       const categoryForm = document.getElementById('budgetForm')
       const amountBudget = document.getElementById('amount_budget')
-      const period = document.getElementById('period')
-      const category = document.getElementById('category')
+      const SelectorPeriod = document.getElementById('SelectorPeriod')
+      const SelectorCategory = document.getElementById('SelectorCategory')
       const submitBtn = document.getElementById('submitBtn')
       
       openModalBtn.addEventListener('click', () => {
         categoryForm.action = "{% url 'expense_income:create_budget' %}"
         submitBtn.textContent = 'Guardar'
         amountBudget.value = ''
-        period.value = ''
-        category.value = ''
+        SelectorPeriod.value = ''
+        SelectorCategory.value = ''
         modal.classList.remove('hidden')
+      })
+      
+      document.querySelectorAll('.select-budget').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.getAttribute('data-url')
+          const amount = btn.getAttribute('data-amount')
+          const period = btn.getAttribute('data-period')
+          const category = btn.getAttribute('data-category')
+      
+          categoryForm.action = url
+          submitBtn.textContent = 'Actualizar'
+          amountBudget.value = parseFloat(amount)
+          SelectorPeriod.value = period
+          SelectorCategory.value = category
+          modal.classList.remove('hidden')
+        })
       })
       
       const searchBudget = document.getElementById('searchBudget')
@@ -272,20 +296,6 @@
         }
       })
       
-      /*document.querySelectorAll('.edit-btn').forEach((btn) => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              btn.addEventListener('click', () => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const url = btn.getAttribute('data-url')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const name = btn.getAttribute('data-name')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const type = btn.getAttribute('data-type')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryForm.action = url
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                submitBtn.textContent = 'Actualizar'
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryNameInput.value = name
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                categoryTypeSelect.value = type
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                modal.classList.remove('hidden')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              })
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })*/
-      
       closeModalBtn.addEventListener('click', () => {
         modal.classList.add('hidden')
       })
@@ -297,27 +307,26 @@
       })
       
       //Remove
-      /*const modalDelete = document.getElementById('categoryModalDelete')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const openModalDeleteBtn = document.getElementsByName('remove-btn')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const removeItem = document.getElementById('remove-item')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const infoRemove = document.getElementById('info-remove')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const closeModalDeleteBtn = document.getElementById('closeModalDeleteBtn')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            document.querySelectorAll('.remove-btn').forEach((btn) => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              btn.addEventListener('click', () => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const url = btn.getAttribute('data-url')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                const name = btn.getAttribute('data-name')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                infoRemove.textContent = 'Selecciona confirmar para eliminar la categoría ' + name
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                removeItem.setAttribute('href', url)
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                modalDelete.classList.remove('hidden')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              })
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            closeModalDeleteBtn.addEventListener('click', () => {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              modalDelete.classList.add('hidden')
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            })*/
+      const modalDelete = document.getElementById('budgetModalDelete')
+      const removeItem = document.getElementById('remove-item')
+      const infoRemove = document.getElementById('info-remove')
+      const closeModalDeleteBtn = document.getElementById('closeModalDeleteBtn')
+      
+      document.querySelectorAll('.remove-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const url = btn.getAttribute('data-url')
+          const name = btn.getAttribute('data-name')
+      
+          infoRemove.textContent = 'Selecciona confirmar para eliminar la categoría ' + name
+          removeItem.setAttribute('href', url)
+      
+          modalDelete.classList.remove('hidden')
+        })
+      })
+      
+      closeModalDeleteBtn.addEventListener('click', () => {
+        modalDelete.classList.add('hidden')
+      })
     </script>
   </body>
 </html>

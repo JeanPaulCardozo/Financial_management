@@ -75,7 +75,7 @@ def edit_category(request, id_category):
 @login_required(login_url='/login')
 def remove_category(request, id_category):
     """Remove Category"""
-    category = Category.objects.get(id_category=id_category)
+    category = Category.objects.get(id_category=id_category, user=request.user)
     category.delete()
     return redirect('expense_income:category')
 
@@ -111,7 +111,7 @@ def budget(request):
     list_months = get_months_by_year.annotate(number_month=ExtractMonth(
         'date')).values('number_month').order_by('number_month').distinct()
     for month in list_months:
-        month["month"] = calendar.month_name[month["number_month"]]
+        month["month"] = calendar.month_name[month["number_month"]].capitalize()
 
     context = {"type_page": "budget", "choice_period": choice_period,
                "choice_category": choice_category, 'user': request.user,
@@ -134,3 +134,27 @@ def create_budget(request):
         ), period=period, user=request.user, category=category_instance)
 
         return redirect('expense_income:budget')
+
+
+@login_required(login_url="/login")
+def edit_budget(request, id_budget):
+    """Edit Budget"""
+    if request.method == "POST":
+        category_id = request.POST["category"]
+        category_instance = Category.objects.get(id_category=category_id)
+        budget = Budget.objects.get(user=request.user, id_budget=id_budget)
+        budget.budget_limit = request.POST["amount_budget"]
+        budget.period = request.POST["period"]
+        budget.category = category_instance
+        budget.save()
+
+        return redirect('expense_income:budget')
+
+
+@login_required(login_url="/login")
+def remove_budget(request, id_budget):
+    """Remove Budget"""
+    budget = Budget.objects.get(id_budget=id_budget, user=request.user)
+    budget.delete()
+
+    return redirect('expense_income:budget')
