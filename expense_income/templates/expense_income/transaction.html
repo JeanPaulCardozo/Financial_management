@@ -56,7 +56,7 @@
           </button>
         </div>
         <!-- Income Category -->
-        <!--                                                                                                                                                                                 <section>
+        <!--                                                                                                                                                                                     <section>
           <div class="bg-white border border-gray-300 p-4 rounded-2xl">
             <div class="border-b border-gray-300 mb-4">
               {% if order_income == 'asc' %}
@@ -115,7 +115,7 @@
               {% endif %}
             </div>
           </div>
-        </section>                                                                                                                                                                                 -->
+        </section>                                                                                                                                                                                     -->
 
         <!-- List Transactions -->
         <section class="mt-4">
@@ -147,13 +147,13 @@
                       {% endif %}
 
                       <div>
-                        <p class="pt-serif-regular text-sm text-gray-700">{{ transaction.title }}</p>
+                        <p class="pt-serif-regular text-sm text-gray-700">{{ transaction.title|title }}</p>
                         <p class="pt-serif-regular text-[12px] text-gray-400">{{ transaction.date|date:'d-M-Y' }}</p>
                       </div>
                     </div>
 
                     <div class="flex justify-center items-center space-x-6">
-                      <div class="pt-serif-regular text-sm text-gray-500">{{ transaction.budget }}</div>
+                      <div class="pt-serif-regular text-sm text-gray-500">{{ transaction.budget|title }}</div>
                       <div class="pt-serif-regular text-sm">
                         {% if transaction.budget.category.type_category == category_expense %}
                           -
@@ -180,7 +180,7 @@
                     <div class="text-[12px] absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-500 text-white rounded px-2 py-1 shadow-lg">
                       <p class="pt-serif-bold-italic">Notas:</p>
                       {% if transaction.notes %}
-                        <p class="pt-serif-regular-italic">{{ transaction.notes }}</p>
+                        <p class="pt-serif-regular-italic">{{ transaction.notes|capfirst }}</p>
                       {% else %}
                         <p class="pt-serif-regular-italic">No hay notas</p>
                       {% endif %}

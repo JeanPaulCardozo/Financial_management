@@ -125,7 +125,7 @@
                 <div class="flex justify-between rounded-lg shadow">
                   <div class="flex-1 select-budget bg-gray-50 pt-3 pl-3 pb-3 pr-5 rounded-tl-lg rounded-bl-lg hover:bg-gray-100 active:bg-gray-200" data-url="{% url 'expense_income:edit_budget' budget.id_budget %}" data-amount="{{ budget.budget_limit }}" data-period="{{ budget.period }}" data-category="{{ budget.category.id_category }}">
                     <div class="pt-serif-bold flex gap-2 font-medium text-gray-900">
-                      <span>{{ budget.category }} | {{ budget.period }}</span>
+                      <span>{{ budget.category|title }} | {{ budget.period|title }}</span>
                       <span>{{ budget.budget_limit|intcomma }}</span>
                     </div>
                     <div class="pt-serif-regular mt-2 text-gray-500 text-sm">

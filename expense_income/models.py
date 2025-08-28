@@ -9,8 +9,8 @@ class Category(models.Model):
 
     class TypeCategory(models.TextChoices):
         """Choice Type Category"""
-        INCOME = 'income', 'Income'
-        EXPENSE = 'expense', 'Expense'
+        INCOME = 'ingreso', 'Ingreso'
+        EXPENSE = 'gasto', 'Gasto'
 
     id_category = models.AutoField(primary_key=True)
     name_category = models.CharField(max_length=200)
@@ -27,8 +27,8 @@ class Budget(models.Model):
     """Model Budget"""
     class Period(models.TextChoices):
         """Choice Period"""
-        MONTHLY = "monthly", "Monthly"
-        WEEKLY = "weekly", "Weekly"
+        MONTHLY = "mensual", "Mensual"
+        WEEKLY = "semanal", "Semanal"
 
     id_budget = models.AutoField(primary_key=True)
     budget_limit = models.DecimalField(max_digits=10, decimal_places=2)
@@ -47,15 +47,15 @@ class Transaction(models.Model):
 
     class PaymentMethod(models.TextChoices):
         """Choice Payment Method"""
-        CASH = 'cash', 'Cash'
-        CARD = 'card', 'Card'
-        TRANSFER = 'transfer', 'Transfer'
+        CASH = 'efectivo', 'Efectivo'
+        CARD = 'tarjeta', 'Tarjeta'
+        TRANSFER = 'transaccion', 'Transacción'
 
     id_transaction = models.AutoField(primary_key=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateTimeField()
     payment_method = models.CharField(
-        max_length=10, choices=PaymentMethod.choices)
+        max_length=12, choices=PaymentMethod.choices)
     notes = models.TextField()
     title = models.CharField(max_length=200)
 
