@@ -22,6 +22,26 @@ class Category(models.Model):
     def __str__(self):
             return self.name_category
 
+
+class Budget(models.Model):
+    """Model Budget"""
+    class Period(models.TextChoices):
+        """Choice Period"""
+        MONTHLY = "monthly", "Monthly"
+        WEEKLY = "weekly", "Weekly"
+
+    id_budget = models.AutoField(primary_key=True)
+    budget_limit = models.DecimalField(max_digits=10, decimal_places=2)
+    date = models.DateTimeField()
+    period = models.CharField(max_length=10, choices=Period.choices)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+         return self.category.name_category
+
+
 class Transaction(models.Model):
     """Model Transaction"""
 
@@ -40,20 +60,4 @@ class Transaction(models.Model):
     title = models.CharField(max_length=200)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-
-class Budget(models.Model):
-    """Model Budget"""
-    class Period(models.TextChoices):
-        """Choice Period"""
-        MONTHLY = "monthly", "Monthly"
-        WEEKLY = "weekly", "Weekly"
-
-    id_budget = models.AutoField(primary_key=True)
-    budget_limit = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateTimeField()
-    period = models.CharField(max_length=10, choices=Period.choices)
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    budget = models.ForeignKey(Budget, on_delete=models.CASCADE,null=True)

@@ -1,3 +1,5 @@
+{% load humanize %}
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -54,7 +56,7 @@
           </button>
         </div>
         <!-- Income Category -->
-        <!--                                                                                                                                                           <section>
+        <!--                                                                                                                                                                                 <section>
           <div class="bg-white border border-gray-300 p-4 rounded-2xl">
             <div class="border-b border-gray-300 mb-4">
               {% if order_income == 'asc' %}
@@ -113,9 +115,9 @@
               {% endif %}
             </div>
           </div>
-        </section>                                                                                                                                                           -->
+        </section>                                                                                                                                                                                 -->
 
-        <!-- Expense Category -->
+        <!-- List Transactions -->
         <section class="mt-4">
           <div class="bg-white border border-gray-300 p-4 rounded-2xl">
             <div class="border-b border-gray-300 mb-4">
@@ -130,7 +132,7 @@
                 {% for transaction in transactions %}
                   <div class="flex items-center justify-between relative group inline-block bg-white pt-1 pb-1 pl-4 pr-4 rounded-lg shadow-sm border">
                     <div class="flex items-center space-x-2">
-                      {% if transaction.category.type_category == category_expense %}
+                      {% if transaction.budget.category.type_category == category_expense %}
                         <div class="flex justify-center items-center box-border bg-red-300 text-white shadow-lg rounded-2xl w-6 h-6">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-3">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
@@ -151,16 +153,16 @@
                     </div>
 
                     <div class="flex justify-center items-center space-x-6">
-                      <div class="pt-serif-regular text-sm text-gray-500">{{ transaction.category }}</div>
+                      <div class="pt-serif-regular text-sm text-gray-500">{{ transaction.budget }}</div>
                       <div class="pt-serif-regular text-sm">
-                        {% if transaction.category.type_category == category_expense %}
+                        {% if transaction.budget.category.type_category == category_expense %}
                           -
                         {% else %}
                           +
-                        {% endif %}$ {{ transaction.amount }}
+                        {% endif %}$ {{ transaction.amount|intcomma }}
                       </div>
                       <div class="flex items-center space-x-2 text-gray-500">
-                        <span class="edit-btn" data-url="{% url 'expense_income:edit_transaction' transaction.id_transaction %}" data-title="{{ transaction.title }}" data-method="{{ transaction.payment_method }}" data-category="{{ transaction.category.id_category }}" data-amount="{{ transaction.amount }}" data-notes="{{ transaction.notes }}">
+                        <span class="edit-btn" data-url="{% url 'expense_income:edit_transaction' transaction.id_transaction %}" data-title="{{ transaction.title }}" data-method="{{ transaction.payment_method }}" date-budget="{{ transaction.budget.id_budget }}" data-amount="{{ transaction.amount }}" data-notes="{{ transaction.notes }}">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                             <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
                             <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -215,10 +217,10 @@
                 </select>
               </div>
               <div class="flex-1">
-                <label class="pt-serif-bold block text-sm font-medium mb-1">Categoría</label>
-                <select name="transaction_category" id="transaction_category" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
-                  {% for category in choices_category %}
-                    <option value="{{ category.id_category }}">{{ category }}</option>
+                <label class="pt-serif-bold block text-sm font-medium mb-1">Presupuesto</label>
+                <select name="transaction_budget" id="transaction_budget" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                  {% for budget in choices_budget %}
+                    <option value="{{ budget.id_budget }}">{{ budget }}</option>
                   {% endfor %}
                 </select>
               </div>
@@ -261,7 +263,7 @@
       const transactionForm = document.getElementById('transactionForm')
       const transactionTitle = document.getElementById('transaction_title')
       const transactionMethod = document.getElementById('transaction_method')
-      const transactionCategory = document.getElementById('transaction_category')
+      const transactionBudget = document.getElementById('transaction_budget')
       const transactionAmount = document.getElementById('transaction_amount')
       const transactionNotes = document.getElementById('transaction_notes')
       const formTitle = document.getElementById('formTitle')
@@ -272,7 +274,7 @@
         submitBtn.textContent = 'Guardar'
         transactionTitle.value = ''
         transactionMethod.value = ''
-        transactionCategory.value = ''
+        transactionBudget.value = ''
         transactionAmount.value = ''
         transactionNotes.value = ''
         formTitle.textContent = 'Crear Nueva transacción'
@@ -285,7 +287,7 @@
           const url = btn.getAttribute('data-url')
           const title = btn.getAttribute('data-title')
           const method = btn.getAttribute('data-method')
-          const category = btn.getAttribute('data-category')
+          const budget = btn.getAttribute('date-budget')
           const amount = btn.getAttribute('data-amount')
           const notes = btn.getAttribute('data-notes')
       
@@ -294,7 +296,7 @@
           submitBtn.textContent = 'Actualizar'
           transactionTitle.value = title
           transactionMethod.value = method
-          transactionCategory.value = category
+          transactionBudget.value = budget
           transactionAmount.value = parseFloat(amount)
           transactionNotes.value = notes
           modal.classList.remove('hidden')

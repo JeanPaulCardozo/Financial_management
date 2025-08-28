@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Category, Budget, Transaction
 from datetime import datetime
-from django.db.models.functions import ExtractMonth, ExtractYear
+from django.db.models.functions import ExtractMonth, ExtractYear, Coalesce
+from django.db.models import Sum, Value, DecimalField, F
 import calendar
 import locale
 
@@ -93,8 +94,15 @@ def budget(request):
     current_month = request.GET.get("month", datetime.now().month)
     category_name = request.GET.get("q", "")
 
-    budget_list = Budget.objects.filter(user=request.user)
-
+    budget_list = (Budget.objects.filter(user=request.user)
+                   .annotate(balance=Coalesce(Sum("transaction__amount"), Value(
+                       0, output_field=DecimalField())),
+                       remaining=F("budget_limit") -
+                       Coalesce(Sum("transaction__amount"), Value(
+                           0, output_field=DecimalField())),
+                       percent=(Coalesce(Sum("transaction__amount"), Value(
+                       0, output_field=DecimalField()))/F("budget_limit")) * 100)
+                   )
     if category_name:
         my_budgets = budget_list.filter(date__year=current_year, date__month=current_month,
                                         category__name_category__icontains=category_name).order_by("-date")
@@ -165,10 +173,10 @@ def transaction(request):
     """Get Transaction Home"""
     transactions = Transaction.objects.filter(user=request.user)
     choices_method = Transaction.PaymentMethod.choices
-    choices_category = Category.objects.filter(user=request.user)
+    choices_budget = Budget.objects.filter(user=request.user)
     category_expense = Category.TypeCategory.EXPENSE
     context = {'transactions': transactions, 'type_page': 'transaction',
-               'choices_method': choices_method, 'choices_category': choices_category,
+               'choices_method': choices_method, 'choices_budget': choices_budget,
                'category_expense': category_expense}
     return render(request, 'expense_income/transaction.html', context)
 
@@ -181,11 +189,11 @@ def create_transaction(request):
         method = request.POST['transaction_method']
         amount = request.POST['transaction_amount']
         notes = request.POST['transaction_notes']
-        category = request.POST['transaction_category']
+        budget = request.POST['transaction_budget']
 
-        category_instance = Category.objects.get(id_category=category)
+        budget_instance = Budget.objects.get(id_budget=budget)
 
-        Transaction.objects.create(date=datetime.now(), category=category_instance,
+        Transaction.objects.create(date=datetime.now(), budget=budget_instance,
                                    user=request.user, title=title, payment_method=method, amount=amount, notes=notes)
         return redirect('expense_income:transaction')
 
@@ -197,14 +205,14 @@ def edit_transaction(request, id_transaction):
         transaction = Transaction.objects.get(
             id_transaction=id_transaction, user=request.user)
 
-        category = Category.objects.get(
-            id_category=request.POST['transaction_category'], user=request.user)
+        budget = Budget.objects.get(
+            id_budget=request.POST['transaction_budget'], user=request.user)
 
         transaction.title = request.POST['transaction_title']
         transaction.payment_method = request.POST['transaction_method']
         transaction.amount = request.POST['transaction_amount']
         transaction.notes = request.POST['transaction_notes']
-        transaction.category = category
+        transaction.budget = budget
 
         transaction.save()
 
@@ -212,10 +220,10 @@ def edit_transaction(request, id_transaction):
 
 
 @login_required(login_url="/login")
-def remove_transaction(request,id_transaction):
+def remove_transaction(request, id_transaction):
     """Remove Transaction"""
     transaction = Transaction.objects.get(
-            id_transaction=id_transaction, user=request.user)
+        id_transaction=id_transaction, user=request.user)
     transaction.delete()
 
     return redirect('expense_income:transaction')
