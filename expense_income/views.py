@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Category, Budget
+from .models import Category, Budget, Transaction
 from datetime import datetime
 from django.db.models.functions import ExtractMonth, ExtractYear
 import calendar
@@ -158,3 +158,33 @@ def remove_budget(request, id_budget):
     budget.delete()
 
     return redirect('expense_income:budget')
+
+
+@login_required(login_url="/login")
+def transaction(request):
+    """Get Transaction Home"""
+    transactions = Transaction.objects.filter(user=request.user)
+    choices_method = Transaction.PaymentMethod.choices
+    choices_category = Category.objects.filter(user=request.user)
+    category_expense = Category.TypeCategory.EXPENSE
+    context = {'transactions': transactions, 'type_page': 'transaction',
+               'choices_method': choices_method, 'choices_category': choices_category,
+               'category_expense':category_expense}
+    return render(request, 'expense_income/transaction.html', context)
+
+
+@login_required(login_url="/login")
+def create_transaction(request):
+    """Create Transaction"""
+    if request.method == "POST":
+        title = request.POST['transaction_title']
+        method = request.POST['transaction_method']
+        amount = request.POST['transaction_amount']
+        notes = request.POST['transaction_notes']
+        category = request.POST['transaction_category']
+
+        category_instance = Category.objects.get(id_category=category)
+
+        Transaction.objects.create(date=datetime.now(), category=category_instance,
+                                   user=request.user, title=title, payment_method=method, amount=amount, notes=notes)
+        return redirect('expense_income:transaction')

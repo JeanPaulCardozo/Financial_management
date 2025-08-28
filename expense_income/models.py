@@ -37,6 +37,7 @@ class Transaction(models.Model):
     payment_method = models.CharField(
         max_length=10, choices=PaymentMethod.choices)
     notes = models.TextField()
+    title = models.CharField(max_length=200)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (home, category, budget, create_category,
-                    edit_category, remove_category, create_budget, edit_budget,remove_budget)
+                    edit_category, remove_category, create_budget, edit_budget,remove_budget,transaction,create_transaction)
 
 app_name = 'expense_income'
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     path('category/edit/<int:id_category>',
          edit_category, name="edit_category"),
     path('category/remove/<int:id_category>',
-         remove_category, name="remove_category")
+         remove_category, name="remove_category"),
+     path('transaction/',transaction,name="transaction"),
+     path('transaction/create',create_transaction,name="create_transaction")
 
 ]
