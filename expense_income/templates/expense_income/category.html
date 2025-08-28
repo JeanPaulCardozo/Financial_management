@@ -75,7 +75,7 @@
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 up-btn">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
                       </svg>
-                      <span class="pt-serif-regular">Categorías de Ingreso</span>
+                      <span class="pt-serif-regular text-base">Categorías de Ingreso</span>
                     </h2>
                   </button>
                 </a>
@@ -88,7 +88,7 @@
                 </div>
               {% else %}
                 {% for category in categories_income %}
-                  <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                  <div class="flex items-center justify-between bg-white pt-2 pb-2 pl-4 pr-4 text-sm rounded-lg shadow-sm border">
                     <div class="flex items-center space-x-3">
                       <div>
                         <p class="pt-serif-regular text-gray-700">{{ category }}</p>
@@ -126,7 +126,7 @@
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4 text-gray-700 down-btn">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
                       </svg>
-                      <span class="pt-serif-regular">Categorías de gasto</span>
+                      <span class="pt-serif-regular text-base">Categorías de gasto</span>
                     </h2>
                   </button>
                 </a>
@@ -150,7 +150,7 @@
                 </div>
               {% else %}
                 {% for category in categories_expense %}
-                  <div class="flex items-center justify-between bg-white p-4 rounded-lg shadow-sm border">
+                  <div class="flex items-center justify-between bg-white pt-2 pb-2 pl-4 pr-4 text-sm rounded-lg shadow-sm border">
                     <div class="flex items-center space-x-3">
                       <div>
                         <p class="pt-serif-regular text-gray-700">{{ category }}</p>
