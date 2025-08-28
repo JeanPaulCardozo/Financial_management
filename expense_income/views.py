@@ -169,7 +169,7 @@ def transaction(request):
     category_expense = Category.TypeCategory.EXPENSE
     context = {'transactions': transactions, 'type_page': 'transaction',
                'choices_method': choices_method, 'choices_category': choices_category,
-               'category_expense':category_expense}
+               'category_expense': category_expense}
     return render(request, 'expense_income/transaction.html', context)
 
 
@@ -188,3 +188,34 @@ def create_transaction(request):
         Transaction.objects.create(date=datetime.now(), category=category_instance,
                                    user=request.user, title=title, payment_method=method, amount=amount, notes=notes)
         return redirect('expense_income:transaction')
+
+
+@login_required(login_url="/login")
+def edit_transaction(request, id_transaction):
+    """Edit Transaction"""
+    if request.method == "POST":
+        transaction = Transaction.objects.get(
+            id_transaction=id_transaction, user=request.user)
+
+        category = Category.objects.get(
+            id_category=request.POST['transaction_category'], user=request.user)
+
+        transaction.title = request.POST['transaction_title']
+        transaction.payment_method = request.POST['transaction_method']
+        transaction.amount = request.POST['transaction_amount']
+        transaction.notes = request.POST['transaction_notes']
+        transaction.category = category
+
+        transaction.save()
+
+        return redirect('expense_income:transaction')
+
+
+@login_required(login_url="/login")
+def remove_transaction(request,id_transaction):
+    """Remove Transaction"""
+    transaction = Transaction.objects.get(
+            id_transaction=id_transaction, user=request.user)
+    transaction.delete()
+
+    return redirect('expense_income:transaction')
