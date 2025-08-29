@@ -15,19 +15,36 @@ locale.setlocale(locale.LC_TIME, "es_CO.UTF-8")
 @login_required(login_url='/login')
 def home(request):
     """Home page"""
-    transactions = Transaction.objects.filter(user=request.user).order_by("-date")[:3]
+    transactions = Transaction.objects.filter(
+        user=request.user).order_by("-date")[:3]
     choices_method = Transaction.PaymentMethod.choices
-    choices_budget = Budget.objects.filter(user=request.user)
+    budgets = Budget.objects.filter(user=request.user)
     category_expense = Category.TypeCategory.EXPENSE
-    context = {"type_page": "home", 
+
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    total_budget = (budgets.annotate(number_month=ExtractMonth('date'), year=ExtractYear('date'))
+                    .filter(number_month=current_month, year=current_year)
+                    .aggregate(total=Sum('budget_limit')))
+    total_balance = (Transaction.objects.filter(user=request.user)
+                     .annotate(number_month=ExtractMonth('date'), year=ExtractYear('date'))
+                     .filter(number_month=current_month, year=current_year)
+                     .aggregate(total=Sum('amount'))
+                     )
+    total_remaining = total_budget['total'] - total_balance['total']
+
+    context = {"type_page": "home",
                'type_page': 'home',
-               'user':request.user,
-               'transactions':transactions, 
-               'category_expense':category_expense,
-               'choices_method':choices_method,
-               'choices_budget':choices_budget
+               'user': request.user,
+               'transactions': transactions,
+               'category_expense': category_expense,
+               'choices_method': choices_method,
+               'choices_budget': budgets,
+               'budget_info': total_budget,
+               'total_balance': total_balance,
+               'total_remaining': total_remaining
                }
-    request.session['info_type_page'] = {'type_page':'home'}
+    request.session['info_type_page'] = {'type_page': 'home'}
     return render(request, 'expense_income/home.html', context)
 
 
@@ -113,7 +130,7 @@ def budget(request):
                        Coalesce(Sum("transaction__amount"), Value(
                            0, output_field=DecimalField())),
                        percent=(Coalesce(Sum("transaction__amount"), Value(
-                       0, output_field=DecimalField()))/F("budget_limit")) * 100)
+                           0, output_field=DecimalField()))/F("budget_limit")) * 100)
                    )
     if category_name:
         my_budgets = budget_list.filter(date__year=current_year, date__month=current_month,
@@ -183,15 +200,16 @@ def remove_budget(request, id_budget):
 @login_required(login_url="/login")
 def transaction(request):
     """Get Transaction Home"""
-    transactions = Transaction.objects.filter(user=request.user).order_by("-date")
+    transactions = Transaction.objects.filter(
+        user=request.user).order_by("-date")
     choices_method = Transaction.PaymentMethod.choices
     choices_budget = Budget.objects.filter(user=request.user)
     category_expense = Category.TypeCategory.EXPENSE
     context = {'transactions': transactions, 'type_page': 'transaction',
                'choices_method': choices_method, 'choices_budget': choices_budget,
                'category_expense': category_expense}
-    
-    request.session['info_type_page'] = {'type_page':'transaction'}
+
+    request.session['info_type_page'] = {'type_page': 'transaction'}
 
     return render(request, 'expense_income/transaction.html', context)
 
@@ -210,8 +228,8 @@ def create_transaction(request):
 
         Transaction.objects.create(date=datetime.now(), budget=budget_instance,
                                    user=request.user, title=title, payment_method=method, amount=amount, notes=notes)
-        
-        response_session = request.session.get('info_type_page',{})
+
+        response_session = request.session.get('info_type_page', {})
 
         return redirect('expense_income:home' if response_session['type_page'] == 'home' else 'expense_income:transaction')
 
