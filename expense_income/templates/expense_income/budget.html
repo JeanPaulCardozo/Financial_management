@@ -132,7 +132,11 @@
                       <p>Gastado: $ {{ budget.balance|intcomma }}</p>
                       <p>Restante: $ {{ budget.remaining|intcomma }}</p>
                       <div class="h-2 bg-gray-200 rounded mt-1">
-                        <div class="h-2 bg-[#6a994e] rounded" style="width: {{ budget.percent|floatformat:0 }}%"></div>
+                        {% if budget.percent > 100 %}
+                          <div class="h-2 bg-[#6a994e] rounded" style="width:100%"></div>
+                        {% else %}
+                          <div class="h-2 bg-[#6a994e] rounded" style="width:{{ budget.percent|floatformat:0 }}%"></div>
+                        {% endif %}
                       </div>
                     </div>
                   </div>
