@@ -56,7 +56,7 @@
           </button>
         </div>
         <!-- Income Category -->
-        <!--                                                                                                                                                                                     <section>
+        <!--                                                                                                                                                                                      <section>
           <div class="bg-white border border-gray-300 p-4 rounded-2xl">
             <div class="border-b border-gray-300 mb-4">
               {% if order_income == 'asc' %}
@@ -115,7 +115,7 @@
               {% endif %}
             </div>
           </div>
-        </section>                                                                                                                                                                                     -->
+        </section>                                                                                                                                                                                      -->
 
         <!-- List Transactions -->
         <section class="mt-4">
@@ -148,7 +148,7 @@
 
                       <div>
                         <p class="pt-serif-regular text-sm text-gray-700">{{ transaction.title|title }}</p>
-                        <p class="pt-serif-regular text-[12px] text-gray-400">{{ transaction.date|date:'d-M-Y' }}</p>
+                        <p class="pt-serif-regular text-[12px] text-gray-400">{{ transaction.date|naturaltime }}</p>
                       </div>
                     </div>
 
