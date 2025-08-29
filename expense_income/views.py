@@ -15,7 +15,19 @@ locale.setlocale(locale.LC_TIME, "es_CO.UTF-8")
 @login_required(login_url='/login')
 def home(request):
     """Home page"""
-    context = {"type_page": "home"}
+    transactions = Transaction.objects.filter(user=request.user).order_by("-date")[:3]
+    choices_method = Transaction.PaymentMethod.choices
+    choices_budget = Budget.objects.filter(user=request.user)
+    category_expense = Category.TypeCategory.EXPENSE
+    context = {"type_page": "home", 
+               'type_page': 'home',
+               'user':request.user,
+               'transactions':transactions, 
+               'category_expense':category_expense,
+               'choices_method':choices_method,
+               'choices_budget':choices_budget
+               }
+    request.session['info_type_page'] = {'type_page':'home'}
     return render(request, 'expense_income/home.html', context)
 
 
@@ -171,13 +183,16 @@ def remove_budget(request, id_budget):
 @login_required(login_url="/login")
 def transaction(request):
     """Get Transaction Home"""
-    transactions = Transaction.objects.filter(user=request.user)
+    transactions = Transaction.objects.filter(user=request.user).order_by("-date")
     choices_method = Transaction.PaymentMethod.choices
     choices_budget = Budget.objects.filter(user=request.user)
     category_expense = Category.TypeCategory.EXPENSE
     context = {'transactions': transactions, 'type_page': 'transaction',
                'choices_method': choices_method, 'choices_budget': choices_budget,
                'category_expense': category_expense}
+    
+    request.session['info_type_page'] = {'type_page':'transaction'}
+
     return render(request, 'expense_income/transaction.html', context)
 
 
@@ -195,7 +210,10 @@ def create_transaction(request):
 
         Transaction.objects.create(date=datetime.now(), budget=budget_instance,
                                    user=request.user, title=title, payment_method=method, amount=amount, notes=notes)
-        return redirect('expense_income:transaction')
+        
+        response_session = request.session.get('info_type_page',{})
+
+        return redirect('expense_income:home' if response_session['type_page'] == 'home' else 'expense_income:transaction')
 
 
 @login_required(login_url="/login")

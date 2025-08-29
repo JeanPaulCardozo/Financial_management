@@ -1,3 +1,210 @@
+{% load humanize greet %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categorías</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <style>
+      .pt-serif-regular {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .pt-serif-bold {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+      .pt-serif-regular-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: italic;
+      }
+      
+      .pt-serif-bold-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: italic;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      {% include './menu.html' %}
+
+      <!-- Main content -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="pt-serif-bold text-2xl font-bold text-gray-800">¡{{ ''|greet }}, {{ user.name }}!</h1>
+            <p class="pt-serif-regular text-gray-500 text-sm">Realiza un seguimiento de los principales indicadores financieros.</p>
+          </div>
+          <button id="openModalBtn" class="pt-serif-regular flex item-center bg-black text-white text-sm px-3 py-2 rounded-md hover:bg-gray-800">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-5 mr-2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>Nueva Transacción
+          </button>
+        </div>
+
+        <!-- Last Transactions -->
+        <section class="mt-4">
+          <div class="bg-white border border-gray-300 p-4 rounded-2xl">
+            <div class="border-b border-gray-300 mb-4">
+              <h2 class="text-base font-semibold mb-4 flex items-center space-x-2"><span class="pt-serif-regular">Últimas Transacciones</span></h2>
+            </div>
+            <div class="space-y-2">
+              {% if not transactions %}
+                <div class="flex justify-center">
+                  <p class="pt-serif-regular text-gray-400 text-base">No hay transacciones</p>
+                </div>
+              {% else %}
+                {% for transaction in transactions %}
+                  <div class="flex items-center justify-between relative group inline-block bg-white pt-1 pb-1 pl-4 pr-4 rounded-lg shadow-sm border">
+                    <div class="flex items-center space-x-2">
+                      {% if transaction.budget.category.type_category == category_expense %}
+                        <div class="flex justify-center items-center box-border bg-red-300 text-white shadow-lg rounded-2xl w-6 h-6">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                          </svg>
+                        </div>
+                      {% else %}
+                        <div class="flex justify-center items-center box-border bg-green-300 text-white shadow-lg rounded-2xl w-6 h-6">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-3">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                          </svg>
+                        </div>
+                      {% endif %}
+
+                      <div>
+                        <p class="pt-serif-regular text-sm text-gray-700">{{ transaction.title|title }}</p>
+                        <p class="pt-serif-regular text-[12px] text-gray-400">{{ transaction.budget }}</p>
+                      </div>
+                    </div>
+
+                    <div class="pt-serif-regular flex flex-col items-end space-x-1">
+                      <p class="text-sm text-gray-700">
+                        {% if transaction.budget.category.type_category == category_expense %}
+                          -
+                        {% else %}
+                          +
+                        {% endif %}$ {{ transaction.amount|intcomma }}
+                      </p>
+                      <p class="text-[12px] text-gray-400">{{ transaction.date|naturaltime }}</p>
+                    </div>
+                    <!-- Tooltip -->
+                    <div class="text-[12px] absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-500 text-white rounded px-2 py-1 shadow-lg">
+                      <p class="pt-serif-bold-italic">Notas:</p>
+                      {% if transaction.notes %}
+                        <p class="pt-serif-regular-italic">{{ transaction.notes|capfirst }}</p>
+                      {% else %}
+                        <p class="pt-serif-regular-italic">No hay notas</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Modal Add/Edit Category -->
+    <div id="transactionModal" class="hidden">
+      <!-- Modal -->
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+          <button id="closeModalBtn" class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">✕</button>
+          <h2 class="pt-serif-bold text-xl mb-4" id="formTitle"></h2>
+          <form id="transactionForm" method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Titulo</label>
+              <input type="text" name="transaction_title" id="transaction_title" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Compras, entretenimiento..." />
+            </div>
+            <div class="flex justify-between space-x-2">
+              <div class="flex-1">
+                <label class="pt-serif-bold block text-sm font-medium mb-1">Método</label>
+                <select name="transaction_method" id="transaction_method" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                  {% for value, label in choices_method %}
+                    <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="flex-1">
+                <label class="pt-serif-bold block text-sm font-medium mb-1">Presupuesto</label>
+                <select name="transaction_budget" id="transaction_budget" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
+                  {% for budget in choices_budget %}
+                    <option value="{{ budget.id_budget }}">{{ budget }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Monto</label>
+              <input type="number" step="0.01" min="0" name="transaction_amount" id="transaction_amount" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="0.00" />
+            </div>
+            <div class="mb-4">
+              <label class="pt-serif-bold block text-sm font-medium mb-1">Notas</label>
+              <textarea id="transaction_notes" name="transaction_notes" rows="4" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Escribe tus notas..."></textarea>
+            </div>
+            <button type="submit" id="submitBtn" class="pt-serif-regular bg-green-400 text-white px-4 py-2 rounded-lg shadow w-full"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      //Add/Edit
+      const modal = document.getElementById('transactionModal')
+      const openModalBtn = document.getElementById('openModalBtn')
+      const closeModalBtn = document.getElementById('closeModalBtn')
+      const transactionForm = document.getElementById('transactionForm')
+      const transactionTitle = document.getElementById('transaction_title')
+      const transactionMethod = document.getElementById('transaction_method')
+      const transactionBudget = document.getElementById('transaction_budget')
+      const transactionAmount = document.getElementById('transaction_amount')
+      const transactionNotes = document.getElementById('transaction_notes')
+      const formTitle = document.getElementById('formTitle')
+      const submitBtn = document.getElementById('submitBtn')
+      
+      openModalBtn.addEventListener('click', () => {
+        transactionForm.action = "{% url 'expense_income:create_transaction' %}"
+        submitBtn.textContent = 'Guardar'
+        transactionTitle.value = ''
+        transactionMethod.value = ''
+        transactionBudget.value = ''
+        transactionAmount.value = ''
+        transactionNotes.value = ''
+        formTitle.textContent = 'Crear Nueva transacción'
+      
+        modal.classList.remove('hidden')
+      })
+      
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.add('hidden')
+      })
+      
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden')
+        }
+      })
+    </script>
+  </body>
+</html>
+
 <!DOCTYPE html>
 <html lang="es" class="h-full">
   <head>
