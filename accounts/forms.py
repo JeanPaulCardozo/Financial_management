@@ -4,7 +4,9 @@ from .models import User
 
 class CustomUserCreationForm(UserCreationForm):
     """Custom form create user"""
+
     class Meta:
         """Meta form"""
+
         model = User
-        fields = ['name', 'email', 'password1', 'password2']
+        fields = ["name", "email", "password1", "password2"]
