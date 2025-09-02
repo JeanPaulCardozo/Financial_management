@@ -25,15 +25,17 @@ def home(request):
     total_budget = (
         budgets.annotate(number_month=ExtractMonth("date"), year=ExtractYear("date"))
         .filter(number_month=current_month, year=current_year)
-        .aggregate(total=Sum("budget_limit"))
+        .aggregate(
+            total=Coalesce(Sum("budget_limit"), Value(0, output_field=DecimalField()))
+        )
     )
     total_balance = (
         Transaction.objects.filter(user=request.user)
         .annotate(number_month=ExtractMonth("date"), year=ExtractYear("date"))
         .filter(number_month=current_month, year=current_year)
-        .aggregate(total=Sum("amount"))
+        .aggregate(total=Coalesce(Sum("amount"), Value(0, output_field=DecimalField())))
     )
-    total_remaining = total_budget["total"] - total_balance["total"]
+    total_remaining = (total_budget["total"] or 0) - (total_balance["total"] or 0)
 
     context = {
         "type_page": "home",
