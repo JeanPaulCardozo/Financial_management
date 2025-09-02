@@ -6,10 +6,57 @@ from django.db.models.functions import ExtractMonth, ExtractYear, Coalesce
 from django.db.models import Sum, Value, DecimalField, F
 import calendar
 import locale
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 # change languege to spanish
 # This action return the name of month in spanish
 locale.setlocale(locale.LC_TIME, "es_CO.UTF-8")
+
+
+@login_required(login_url="/login")
+def report(request):
+    user = request.user
+
+    expenses_by_category = (
+        Transaction.objects.filter(user=user, budget__category__type_category="gasto")
+        .values("budget__category__name_category")
+        .annotate(total=Sum("amount"))
+    )
+
+    monthly_summary = (
+        Transaction.objects.filter(user=user)
+        .annotate(month=ExtractMonth("date"), year=ExtractYear("date"))
+        .values("year", "month", "budget__category__type_category")
+        .annotate(total=Sum("amount"))
+        .order_by("year", "month")
+    )
+
+    budget_vs_spent = (
+        Budget.objects.filter(user=user)
+        .values("category__name_category", "budget_limit")
+        .annotate(spent=Sum("transaction__amount"))
+    )
+
+    payments = (
+        Transaction.objects.filter(user=user)
+        .values("payment_method")
+        .annotate(total=Sum("amount"))
+    )
+
+    top_transactions = Transaction.objects.filter(user=user).order_by("-amount")[:5]
+
+    context = {
+        "expenses_by_category": list(expenses_by_category),
+        "monthly_summary":list(monthly_summary),
+        "budget_vs_spent": list(budget_vs_spent),
+        "payments": list(payments),
+        "top_transactions": top_transactions,
+        "type_page": "reports",
+    }
+
+    
+    return render(request, "expense_income/report.html", context)
 
 
 @login_required(login_url="/login")

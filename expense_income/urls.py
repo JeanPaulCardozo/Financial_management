@@ -13,6 +13,7 @@ from .views import (
     create_transaction,
     edit_transaction,
     remove_transaction,
+    report,
 )
 
 app_name = "expense_income"
@@ -38,4 +39,5 @@ urlpatterns = [
         remove_transaction,
         name="remove_transaction",
     ),
+    path("reports", report, name="reports"),
 ]
