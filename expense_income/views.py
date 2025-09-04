@@ -48,14 +48,13 @@ def report(request):
 
     context = {
         "expenses_by_category": list(expenses_by_category),
-        "monthly_summary":list(monthly_summary),
+        "monthly_summary": list(monthly_summary),
         "budget_vs_spent": list(budget_vs_spent),
         "payments": list(payments),
         "top_transactions": top_transactions,
         "type_page": "reports",
     }
 
-    
     return render(request, "expense_income/report.html", context)
 
 

@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
   <head>
@@ -8,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       .pt-serif-regular {
         font-family: 'PT Serif', serif;
@@ -42,8 +45,107 @@
 
       <!-- Main content -->
       <main class="flex-1 p-8 overflow-y-auto">
-        <!-- Last Transactions -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="pt-serif-bold text-2xl font-bold text-gray-800">Reportes</h1>
+            <p class="pt-serif-regular text-gray-500 text-sm">Reportes visuales para entender tus finanzas de forma rápida y sencilla.</p>
+          </div>
+        </div>
+        <!-- Reports -->
+        <section>
+          <div class="grid grid-cols-2 gap-2">
+            <div style="height:230px">
+              <canvas id="expensesByCategory"></canvas>
+            </div>
+            <div style="height:230px">
+              <canvas id="payments"></canvas>
+            </div>
+            <div style="height:230px">
+              <canvas id="budgetVsSpent"></canvas>
+            </div>
+            <div style="height:230px">
+              <canvas id="monthlySummary"></canvas>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
+
+    <!-- Guardamos los datos en JSON ocultos -->
+    {{ expenses_by_category|json_script:'expenses_by_category_data' }}
+    {{ monthly_summary|json_script:'monthly_summary_data' }}
+    {{ budget_vs_spent|json_script:'budget_vs_spent_data' }}
+    {{ payments|json_script:'payments_data' }}
+    <script>
+      // Recuperar datos desde los json_script
+      const expensesByCategory = JSON.parse(document.getElementById('expenses_by_category_data').textContent)
+      const monthlySummary = JSON.parse(document.getElementById('monthly_summary_data').textContent)
+      const budgetVsSpent = JSON.parse(document.getElementById('budget_vs_spent_data').textContent)
+      const payments = JSON.parse(document.getElementById('payments_data').textContent)
+      
+      // 1️⃣ Gastos por categoría (pastel)
+      new Chart(document.getElementById('expensesByCategory'), {
+        type: 'pie',
+        data: {
+          labels: expensesByCategory.map((item) => item.budget__category__name_category),
+          datasets: [
+            {
+              label: 'Gastos',
+              data: expensesByCategory.map((item) => item.total)
+            }
+          ]
+        }
+      })
+      
+      // 2️⃣ Resumen mensual (línea)
+      new Chart(document.getElementById('monthlySummary'), {
+        type: 'line',
+        data: {
+          labels: monthlySummary.map((item) => `${item.month}/${item.year}`),
+          datasets: [
+            {
+              label: 'Transacciones',
+              data: monthlySummary.map((item) => item.total),
+              borderColor: 'rgba(75, 192, 192, 1)',
+              tension: 0.2
+            }
+          ]
+        }
+      })
+      
+      // 3️⃣ Presupuesto vs Gastado (barras)
+      new Chart(document.getElementById('budgetVsSpent'), {
+        type: 'bar',
+        data: {
+          labels: budgetVsSpent.map((item) => item.category__name_category),
+          datasets: [
+            {
+              label: 'Presupuesto',
+              data: budgetVsSpent.map((item) => item.budget_limit),
+              backgroundColor: 'rgba(54, 162, 235, 0.6)'
+            },
+            {
+              label: 'Gastado',
+              data: budgetVsSpent.map((item) => item.spent || 0),
+              backgroundColor: 'rgba(255, 99, 132, 0.6)'
+            }
+          ]
+        }
+      })
+      
+      // 4️⃣ Métodos de pago (dona)
+      new Chart(document.getElementById('payments'), {
+        type: 'doughnut',
+        data: {
+          labels: payments.map((item) => item.payment_method),
+          datasets: [
+            {
+              label: 'Pagos',
+              data: payments.map((item) => item.total)
+            }
+          ]
+        }
+      })
+    </script>
   </body>
 </html>
