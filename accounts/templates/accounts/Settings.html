@@ -1,0 +1,130 @@
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Categorías</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+    <style>
+      .pt-serif-regular {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      
+      .pt-serif-bold {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+      
+      .pt-serif-regular-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 400;
+        font-style: italic;
+      }
+      
+      .pt-serif-bold-italic {
+        font-family: 'PT Serif', serif;
+        font-weight: 700;
+        font-style: italic;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      {% include 'expense_income/menu.html' %}
+
+      <!-- Main content -->
+      <main class="flex-1 p-8 overflow-y-auto">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="pt-serif-bold text-2xl font-bold text-gray-800">Perfil de Usuario</h1>
+            <p class="pt-serif-regular text-gray-500 text-sm">Administra tu cuenta y preferencias</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 space-x-6">
+          <div class="col-span-2">
+            <!-- Form Personal Information -->
+            <div class="bg-white p-6 rounded-lg shadow-sm">
+              <h2 class="pt-serif-regular text-lg text-gray-800">Información Personal</h2>
+              <div class="flex items-center space-x-6 mt-4">
+                <img src="" alt="Imagen de perfil" class="pt-serif-regular text-[12px] w-16 h-16 rounded-full bg-gray-200" />
+                <div class="flex items-center justify-between">
+                  <label for="upload" class="pt-serif-regular cursor-pointer inline-flex items-center px-3 py-1 bg-gray-200 text-gray-700 text-[12px] font-medium rounded-md shadow hover:bg-gray-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-3 mr-2">
+                      <path d="M12 9a3.75 3.75 0 1 0 0 7.5A3.75 3.75 0 0 0 12 9Z" />
+                      <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 0 1 5.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 0 1-3 3h-15a3 3 0 0 1-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 0 0 1.11-.71l.822-1.315a2.942 2.942 0 0 1 2.332-1.39ZM6.75 12.75a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Zm12-1.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z" clip-rule="evenodd" />
+                    </svg>Cambiar foto
+                  </label>
+                  <input id="upload" type="file" accept="image/*" class="hidden" />
+                </div>
+              </div>
+              <div class="pt-4">
+                <form id="profileForm" method="post" action="{% url 'accounts:update_user' %}">
+                  {% csrf_token %}
+                  <div class="flex gap-4">
+                    <div class="flex-1 mb-4">
+                      <label class="pt-serif-bold block text-sm font-medium mb-1">Nombre</label>
+                      <input value="{{ user.name }}" type="text" name="username" id="username" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Juan..." />
+                    </div>
+                    <div class="flex-1 mb-4">
+                      <label class="pt-serif-bold block text-sm font-medium mb-1">Email</label>
+                      <input value="{{ user.email }}" type="email" name="email" id="email" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="Ej: Juan@example.com..." />
+                    </div>
+                  </div>
+
+                  <button type="submit" id="submitBtn" class="text-sm pt-serif-regular bg-gray-800 text-white px-4 py-2 rounded-lg shadow">Guardar Cambios</button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Form update password -->
+            <div class="bg-white p-6 rounded-lg shadow-sm mt-4">
+              <h2 class="pt-serif-regular text-lg text-gray-800">Cambiar Contraseña</h2>
+
+              <div class="pt-4">
+                <form id="profileForm" method="post" action="{% url 'accounts:update_password' %}">
+                  {% csrf_token %}
+                  <div class="grid flex-col gap-4">
+                    <div class="mb-4">
+                      <label class="pt-serif-bold block text-sm font-medium mb-1">Contraseña Actual</label>
+                      <input type="text" name="current_password" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" />
+                    </div>
+                    <div class="mb-4">
+                      <label class="pt-serif-bold block text-sm font-medium mb-1">Nueva Contraseña</label>
+                      <input type="text" name="new_password" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" />
+                    </div>
+                    <div class="mb-4">
+                      <label class="pt-serif-bold block text-sm font-medium mb-1">Confirmar nueva contraseña</label>
+                      <input type="text" name="confirm_password" class="text-sm pt-serif-regular w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" />
+                    </div>
+                  </div>
+
+                  <button type="submit" id="submitBtn" class="text-sm pt-serif-regular bg-gray-800 text-white px-4 py-2 rounded-lg shadow">Actualizar Contraseña</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-1 bg-white p-6 rounded-lg shadow-sm h-auto self-start">
+            <h2 class="pt-serif-regular text-lg text-gray-800">Acciones de la cuenta</h2>
+
+            <div class="pt-4 flex flex-col gap-2">
+              <a href=""><button type="submit" id="submitBtn" class="w-full text-sm pt-serif-regular bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow">Exportar Datos</button></a>
+              <a href=""><button type="submit" id="submitBtn" class="w-full text-sm pt-serif-regular bg-gray-200 text-gray-800 px-4 py-2 rounded-lg shadow">Eliminar Cuenta</button></a>
+              <a href="{% url 'accounts:logout' %}"><button class="w-full text-sm pt-serif-regular bg-gray-800 text-white px-4 py-2 rounded-lg shadow">Cerrar Sesión</button></a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

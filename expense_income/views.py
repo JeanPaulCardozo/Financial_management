@@ -6,8 +6,6 @@ from django.db.models.functions import ExtractMonth, ExtractYear, Coalesce
 from django.db.models import Sum, Value, DecimalField, F
 import calendar
 import locale
-import json
-from django.core.serializers.json import DjangoJSONEncoder
 
 # change languege to spanish
 # This action return the name of month in spanish

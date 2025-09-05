@@ -39,8 +39,10 @@
     </svg>
 
     <div>
-      <p class="pt-serif-bold text-sm font-semibold">{{ user.name }}</p>
-      <p class="pt-serif-regular-italic text-xs text-gray-500">{{ user.email }}</p>
+      <a href="{% url 'accounts:settings' %}">
+        <p class="pt-serif-bold text-sm font-semibold">{{ user.name }}</p>
+        <p class="pt-serif-regular-italic text-xs text-gray-500">{{ user.email }}</p>
+      </a>
     </div>
   </div>
 </aside>
