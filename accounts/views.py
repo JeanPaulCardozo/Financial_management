@@ -54,18 +54,23 @@ def settings(request):
 
 def login_user(request):
     """Login"""
+    global context
+    context = {"message": ""}
     if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
         user = authenticate(request, email=email, password=password)
         if user:
             login(request, user)
-            # Si hay un "next", redirige allí, si no, al home
+
+            request.session.set_expiry(3600)  # expire in 1 hour
+
+            # If there's a "next", redirect there, if not, to home
             next_url = request.GET.get("next") or request.POST.get("next")
             return redirect(next_url if next_url else "expense_income:home")
-    return render(
-        request, "accounts/login.html", {"message": "Credenciales incorrectas"}
-    )
+        
+        context = {"message": "Credenciales Incorrectas"}
+    return render(request, "accounts/login.html", context)
 
 
 def register_user(request):
