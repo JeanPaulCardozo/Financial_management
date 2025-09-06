@@ -42,33 +42,33 @@
         <div class="flex justify-center mb-6">
           <div class="flex items-center space-x-2">
             <span class="text-2xl">💳</span>
-            <h1 class="text-xl font-semibold">FinanceApp</h1>
+            <h1 class="pt-serif-bold text-xl font-semibold">FinanceApp</h1>
           </div>
         </div>
 
         <!-- Tabs -->
         <div class="flex justify-center mb-6 border-b border-gray-200">
-          <a href="{% url 'accounts:login' %}"><button class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">Iniciar Sesión</button></a>
-          <a href="{% url 'accounts:register' %}"><button class="px-4 py-2 text-sm font-medium text-gray-900 border-b-2 border-gray-900 focus:outline-none">Registrarse</button></a>
+          <a href="{% url 'accounts:login' %}"><button class="pt-serif-regular px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none">Iniciar Sesión</button></a>
+          <a href="{% url 'accounts:register' %}"><button class="pt-serif-regular px-4 py-2 text-sm font-medium text-gray-900 border-b-2 border-gray-900 focus:outline-none">Registrarse</button></a>
         </div>
 
         <!-- Form -->
         <form class="space-y-4" method="post" action="{% url 'accounts:register' %}">
           {% csrf_token %}
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="name" id="name" name="name" placeholder="tu@email.com" class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 outline-none" />
+            <label for="name" class="pt-serif-regular block text-sm font-medium text-gray-700">Name</label>
+            <input type="name" id="name" name="name" placeholder="tu@email.com" class="pt-serif-regular mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 outline-none" />
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" placeholder="tu@email.com" class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 outline-none" />
+            <label for="email" class="pt-serif-regular block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.com" class="pt-serif-regular mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500 outline-none" />
           </div>
 
           <div>
-            <label for="password1" class="block text-sm font-medium text-gray-700">Contraseña</label>
+            <label for="password1" class="pt-serif-regular block text-sm font-medium text-gray-700">Contraseña</label>
             <div class="flex justify-between items-center border border-gray-300 rounded-lg overflow-hidden">
-              <input type="password" name="password1" id="password1" class="text-sm pt-serif-regular w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="••••••••" />
+              <input type="password" name="password1" id="password1" class="pt-serif-regular text-sm pt-serif-regular w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="••••••••" />
               <button type="button" onclick="togglePassword('password1','show_password1','hide_password1')" class="bg-gray-200 p-3 w-10 h-full hover:bg-gray-300 active:bg-gray-400 transition text-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4" id="show_password1">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -82,9 +82,9 @@
           </div>
 
           <div>
-            <label for="password2" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+            <label for="password2" class="pt-serif-regular block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
             <div class="flex justify-between items-center border border-gray-300 rounded-lg overflow-hidden">
-              <input type="password" name="password2" id="password2" class="text-sm pt-serif-regular w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="••••••••" />
+              <input type="password" name="password2" id="password2" class="pt-serif-regular text-sm pt-serif-regular w-full px-3 py-2 focus:outline-none focus:ring focus:border-blue-300" placeholder="••••••••" />
               <button type="button" onclick="togglePassword('password2','show_password2','hide_password2')" class="bg-gray-200 p-3 w-10 h-full hover:bg-gray-300 active:bg-gray-400 transition text-gray-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4" id="show_password2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -97,7 +97,7 @@
             </div>
           </div>
 
-          <button type="submit" class="w-full bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition">Registrarse</button>
+          <button type="submit" class="pt-serif-regular w-full bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition">Registrarse</button>
         </form>
       </div>
     </div>
