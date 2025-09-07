@@ -68,7 +68,7 @@ def login_user(request):
             # If there's a "next", redirect there, if not, to home
             next_url = request.GET.get("next") or request.POST.get("next")
             return redirect(next_url if next_url else "expense_income:home")
-        
+
         context = {"message": "Credenciales Incorrectas"}
     return render(request, "accounts/login.html", context)
 

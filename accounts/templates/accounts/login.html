@@ -87,7 +87,7 @@
               <input type="checkbox" class="pt-serif-regular h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
               <span class="pt-serif-regular">Recordarme</span>
             </label>
-            <a href="#" class="pt-serif-regular text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+            <a href="{% url 'accounts:password_reset' %}" class="pt-serif-regular text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
           </div>
 
           <button type="submit" class="pt-serif-regular w-full bg-gray-900 text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition">Iniciar Sesión</button>

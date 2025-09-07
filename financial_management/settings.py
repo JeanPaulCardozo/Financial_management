@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts.apps.AccountsConfig",
     "expense_income.apps.ExpenseIncomeConfig",
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Model Auth
 AUTH_USER_MODEL = "accounts.User"
+
+# Setting for email
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
