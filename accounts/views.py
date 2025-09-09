@@ -4,7 +4,7 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def update_password(request):
     """Update Password"""
     if request.method == "POST":
@@ -21,7 +21,7 @@ def update_password(request):
             )  # Redirect to settings page after update
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def update_user(request):
     """Update User Information"""
     if request.method == "POST":
@@ -38,14 +38,14 @@ def update_user(request):
     return render(request, "accounts/Settings.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def logout_view(request):
     """Logout view"""
     logout(request)
     return render(request, "accounts/login.html")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def settings(request):
     """Settings Page"""
     context = {"type_page": "settings", "user": request.user}

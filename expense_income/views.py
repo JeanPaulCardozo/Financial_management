@@ -12,7 +12,7 @@ import locale
 locale.setlocale(locale.LC_TIME, "es_CO.UTF-8")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def report(request):
     user = request.user
 
@@ -56,7 +56,7 @@ def report(request):
     return render(request, "expense_income/report.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def home(request):
     """Home page"""
     transactions = Transaction.objects.filter(user=request.user).order_by("-date")[:3]
@@ -96,7 +96,7 @@ def home(request):
     return render(request, "expense_income/home.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def category(request):
     """Category Section"""
     choices_category = Category.TypeCategory.choices
@@ -131,7 +131,7 @@ def category(request):
     return render(request, "expense_income/category.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def create_category(request):
     """Create Category"""
     if request.method == "POST":
@@ -143,7 +143,7 @@ def create_category(request):
         return redirect("expense_income:category")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def edit_category(request, id_category):
     """Edit Category"""
     if request.method == "POST":
@@ -157,7 +157,7 @@ def edit_category(request, id_category):
         return redirect("expense_income:category")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def remove_category(request, id_category):
     """Remove Category"""
     category = Category.objects.get(id_category=id_category, user=request.user)
@@ -165,7 +165,7 @@ def remove_category(request, id_category):
     return redirect("expense_income:category")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def budget(request):
     """home budget"""
 
@@ -235,7 +235,7 @@ def budget(request):
     return render(request, "expense_income/budget.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def create_budget(request):
     """Create budget"""
     if request.method == "POST":
@@ -256,7 +256,7 @@ def create_budget(request):
         return redirect("expense_income:budget")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def edit_budget(request, id_budget):
     """Edit Budget"""
     if request.method == "POST":
@@ -271,7 +271,7 @@ def edit_budget(request, id_budget):
         return redirect("expense_income:budget")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def remove_budget(request, id_budget):
     """Remove Budget"""
     budget = Budget.objects.get(id_budget=id_budget, user=request.user)
@@ -280,7 +280,7 @@ def remove_budget(request, id_budget):
     return redirect("expense_income:budget")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def transaction(request):
     """Get Transaction Home"""
     transactions = Transaction.objects.filter(user=request.user).order_by("-date")
@@ -300,7 +300,7 @@ def transaction(request):
     return render(request, "expense_income/transaction.html", context)
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def create_transaction(request):
     """Create Transaction"""
     if request.method == "POST":
@@ -331,7 +331,7 @@ def create_transaction(request):
         )
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def edit_transaction(request, id_transaction):
     """Edit Transaction"""
     if request.method == "POST":
@@ -354,7 +354,7 @@ def edit_transaction(request, id_transaction):
         return redirect("expense_income:transaction")
 
 
-@login_required(login_url="/login")
+@login_required(login_url="login/")
 def remove_transaction(request, id_transaction):
     """Remove Transaction"""
     transaction = Transaction.objects.get(
