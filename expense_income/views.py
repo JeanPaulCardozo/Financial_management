@@ -6,6 +6,7 @@ from django.db.models.functions import ExtractMonth, ExtractYear, Coalesce
 from django.db.models import Sum, Value, DecimalField, F
 import calendar
 import locale
+from django.utils import timezone
 
 # change languege to spanish
 # This action return the name of month in spanish
@@ -247,7 +248,7 @@ def create_budget(request):
 
         Budget.objects.create(
             budget_limit=amount,
-            date=datetime.now(),
+            date=timezone.now(),
             period=period,
             user=request.user,
             category=category_instance,
@@ -313,7 +314,7 @@ def create_transaction(request):
         budget_instance = Budget.objects.get(id_budget=budget)
 
         Transaction.objects.create(
-            date=datetime.now(),
+            date=timezone.now(),
             budget=budget_instance,
             user=request.user,
             title=title,
@@ -323,11 +324,10 @@ def create_transaction(request):
         )
 
         response_session = request.session.get("info_type_page", {})
+        type_page = response_session.get("type_page", "transaction")
 
         return redirect(
-            "expense_income:home"
-            if response_session["type_page"] == "home"
-            else "expense_income:transaction"
+            "expense_income:home" if type_page == "home" else "expense_income:transaction"
         )
 
 
