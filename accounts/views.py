@@ -38,7 +38,6 @@ def update_user(request):
     return render(request, "accounts/Settings.html", context)
 
 
-@login_required(login_url="login/")
 def logout_view(request):
     """Logout view"""
     logout(request)

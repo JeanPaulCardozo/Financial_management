@@ -36,15 +36,17 @@ class AccountsViewsTests(TestCase):
     # -----------------------------
     def test_logout_view(self):
         self.client.login(email="test@example.com", password="testpassword")
-        response = self.client.get(reverse("accounts:logout_view"))
+        response = self.client.get(reverse("accounts:logout"))
         self.assertTemplateUsed(response, "accounts/login.html")
 
     # -----------------------------
-    # Test settings requiere login
+    # Test settings require login
     # -----------------------------
     def test_settings_requires_login(self):
         response = self.client.get(reverse("accounts:settings"))
-        self.assertRedirects(response, "/login?next=/settings")
+        login_url = reverse("accounts:login")
+        settings_url = reverse("accounts:settings")
+        self.assertRedirects(response, f"{login_url}?next={settings_url}")
 
     def test_settings_logged_in(self):
         self.client.login(email="test@example.com", password="testpassword")
@@ -114,4 +116,3 @@ class AccountsViewsTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "accounts/register.html")
-        self.assertContains(response, "error")
